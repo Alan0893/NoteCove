@@ -169,3 +169,37 @@ exports.uploadProfilePhoto = (request, response) => {
       return response.status(500).json({ error: err.code });
     })
 };
+
+exports.getUserDetail = (request, response) => {
+  let userData = {};
+  db.doc(`/users/${request.user.username}`)
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        userData.userCredentials = doc.data();
+        return response.json(userData);
+      } else {
+        return response.status(404).json({ error: "User not found" });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      return response.status(500).json({ error: error.code });
+    });
+};
+
+exports.updateUserDetails = (request, response) => {
+  const updatedUser = request.body;
+  let document = db.collection("users").doc(`${request.user.username}`);
+  document
+    .update(updatedUser)
+    .then(() => {
+      response.json({ message: "Updated successfully" });
+    })
+    .catch((error) => {
+      console.error(error);
+      return response.status(500).json({
+        message: "Cannot update the user details"
+      });
+    });
+};
