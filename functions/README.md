@@ -1,7 +1,7 @@
 # Functions
 **API Endpoints for Todo and User**
 
-## Todo Endpoints
+## Todo
 #### getAllTodos
 ```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todos
