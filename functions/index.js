@@ -14,7 +14,8 @@ const {
 // User Functions
 const {
   loginUser,
-  signUpUser
+  signUpUser,
+  uploadProfilePhoto
 } = require("./APIs/users");
 
 // Todo API
@@ -27,5 +28,6 @@ app.put("/todo/:todoId", auth, editTodo);
 // User API
 app.post("/login", loginUser);
 app.post("signup", signUpUser);
+app.post("/user/image", auth, uploadProfilePhoto);
 
 exports.api = functions.https.onRequest(app);
