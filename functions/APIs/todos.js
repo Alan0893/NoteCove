@@ -76,3 +76,25 @@ exports.postOneTodo = async (request, response) => {
     response.status(500).json({ error: "Something went wrong" });
   }
 };
+
+exports.deleteTodo = async (request, response) => {
+  try {
+    const document = db.doc(`/todos/${request.params.todoId}`);
+    const doc = await document.get();
+
+    if (!doc.exists) {
+      return response.status(404).json({ error: "Todo not found" });
+    }
+
+    if(doc.data().username !== request.user.username) {
+      return response.status(403).json({ error: "Unauthorized" });
+    }
+
+    await document.delete();
+
+    return response.json({ message: "Delete successful" });
+  } catch (err) {
+    console.error(err);
+    return response.status(500).json({ error: err.code })
+  }
+};
