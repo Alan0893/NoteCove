@@ -8,14 +8,22 @@ const {
   getOneTodo,
   postOneTodo,
   deleteTodo,
-  editTodo
+  editTodo,
 } = require("./APIs/todos");
+
+// User Functions
+const {
+  loginUser
+} = require("./APIs/users");
 
 // Todo API
 app.get("/todos", auth, getAllTodos);
 app.get("/todo/:todoId", auth, getOneTodo);
 app.post("/todo", auth, postOneTodo);
-app.delete("/todo:todoId", auth, deleteTodo);
-app.put("/todo:todoId", auth, editTodo);
+app.delete("/todo/:todoId", auth, deleteTodo);
+app.put("/todo/:todoId", auth, editTodo);
+
+// User API
+app.post('/login', loginUser);
 
 exports.api = functions.https.onRequest(app);
