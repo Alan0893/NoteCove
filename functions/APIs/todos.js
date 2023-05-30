@@ -25,3 +25,25 @@ exports.getAllTodos = async (request, response) => {
     return response.status(500).json({ error: err.code });
   }
 };
+
+exports.getOneTodo = async (request, response) => {
+  try {
+    const doc = await db.doc(`/todos/${request.params.todoId}`).get();
+
+    if (!doc.exists) {
+      return response.status(404).json({ error: "Todo not found" });
+    }
+ 
+    if (doc.data().username !== request.user.username) {
+      return response.status(403).json({ error: "Unauthorized" });
+    }
+
+    const todoData = doc.data();
+    todoData.todoId = doc.id;
+
+    return response.json(todoData);
+  } catch (err) {
+    console.error(err);
+    return response.status(500).json({ error: err.code });
+  }
+};
