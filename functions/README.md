@@ -3,17 +3,17 @@
 
 ## Todo Endpoints
 #### getAllTodos
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todos
 METHOD: GET
 ```
 #### getOneTodo
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todo/<todoId>
 METHOD: GET
 ```
 #### postOneTodo
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todo
 METHOD: POST
 BODY: {
@@ -22,12 +22,12 @@ BODY: {
 }
 ```
 #### deleteTodo
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todo/<todoId>
 METHOD: DELETE
 ```
 #### editTodo
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todo/<todoId>
 METHOD: PUT
 BODY: {
@@ -38,7 +38,7 @@ BODY: {
 
 ## Users
 #### loginUser
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/login
 METHOD: POST
 BODY: {
@@ -47,7 +47,7 @@ BODY: {
 }
 ```
 #### signUpUser
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/signup
 METHOD: POST
 BODY: {
@@ -62,7 +62,7 @@ BODY: {
 }
 ```
 #### uploadProfilePicture
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/user/image
 METHOD: POST
 BODY: {
@@ -71,7 +71,7 @@ BODY: {
 }
 ```
 #### updateUserDetails
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/user
 METHOD: POST
 BODY: {
@@ -81,7 +81,7 @@ BODY: {
 }
 ```
 #### getUserDetails
-```http
+```
 URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/user
 METHOD: GET
 ```
