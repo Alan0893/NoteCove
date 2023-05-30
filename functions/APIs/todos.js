@@ -98,3 +98,23 @@ exports.deleteTodo = async (request, response) => {
     return response.status(500).json({ error: err.code })
   }
 };
+
+exports.editTodo = async (request, response) => {
+  try { 
+    if (request.body.todoId || request.body.createdAt) {
+      return response.status(403).json({ message: "Not allowed to edit" });
+    }
+
+    const doc = db.collection("todos").doc(`${request.params.todoId}`);
+    await doc.update(request.body);
+
+    return response.json({ message: "Updated successfully" });
+  } catch (err) {
+    console.error(err);
+
+    if(err.code === 5) {
+      return response.status(404).json({ message: "Not found" });
+    }
+    return response.status(500).json({ error: err.code });
+  }
+};
