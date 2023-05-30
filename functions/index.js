@@ -13,7 +13,8 @@ const {
 
 // User Functions
 const {
-  loginUser
+  loginUser,
+  signUpUser
 } = require("./APIs/users");
 
 // Todo API
@@ -24,6 +25,7 @@ app.delete("/todo/:todoId", auth, deleteTodo);
 app.put("/todo/:todoId", auth, editTodo);
 
 // User API
-app.post('/login', loginUser);
+app.post("/login", loginUser);
+app.post("signup", signUpUser);
 
 exports.api = functions.https.onRequest(app);
