@@ -28,7 +28,7 @@ app.delete("/todo/:todoId", auth, deleteTodo);
 app.put("/todo/:todoId", auth, editTodo);
 
 // User API
-app.post("/login", loginUser);
+app.post("login", loginUser);
 app.post("/signup", signUpUser);
 app.post("/user/image", auth ,uploadProfilePhoto);
 app.post("/user", auth ,updateUserDetails);
