@@ -33,11 +33,11 @@ const Form = styled("form")(({ theme }) => ({
 const SubmitButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(3, 0, 2),
 }));
-const CustomError = styled(Typography)({
-  color: "red",
+const CustomError = styled(Typography)(({ theme }) => ({
+  color: theme.palette.error.main,
   fontSize: "0.8rem",
   marginTop: 10,
-});
+}));
 const Progress = styled(CircularProgress)({
   position: "absolute",
 });
