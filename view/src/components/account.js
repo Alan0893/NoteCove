@@ -116,7 +116,7 @@ const Account = (props) => {
     evt.preventDefault();
     setState((prevState) => ({
       ...prevState,
-      loading: true,
+      uiLoading: true,
     }));
     authMiddleWare(props.history);
     const authToken = localStorage.getItem("AuthToken");
@@ -140,7 +140,7 @@ const Account = (props) => {
         setState((prevState) => ({
           ...prevState,
           uiLoading: false,
-          errorMsg: "Error in posting the data",
+          imageError: "Error in posting the data",
         }));
       });
   };
@@ -148,7 +148,7 @@ const Account = (props) => {
     evt.preventDefault();
     setState((prevState) => ({
       ...prevState,
-      buttonLoading: false,
+      buttonLoading: true,
     }));
     authMiddleWare(props.history);
     const authToken = localStorage.getItem("AuthToken");
@@ -166,6 +166,7 @@ const Account = (props) => {
           ...prevState,
           buttonLoading: false
         }));
+        window.location.reload();
       })
       .catch((err) => {
         if (err.response.status === 403) {
@@ -178,7 +179,7 @@ const Account = (props) => {
       });
   };
 
-  if (state.uiLoading) {
+  if (state.uiLoading === true) {
     return (
       <Content>
         <Toolbar />
@@ -322,9 +323,9 @@ const Account = (props) => {
           }
         >
           Save details
-          {state.buttonLoading && (
+          {state.buttonLoading && 
             <Progress size={30} />
-          )}
+          }
         </SubmitButton>
       </Content>
     )
