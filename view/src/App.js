@@ -5,13 +5,19 @@ import Login from "./pages/login";
 import Signup from "./pages/signup";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { lighten, darken } from "@mui/material/styles"
+import { light } from "@mui/material/styles/createPalette";
+
+const mainColor = "#4c8bf5";
+const lightShade = lighten(mainColor, 0.2);
+const darkShade = darken(mainColor, 0.2);
 
 const theme = createTheme({
   palette: {
     primary: {
-      light: "#33c9dc",
-      main: "#ff5722",
-      dark: "#d50000",
+      light: lightShade,
+      main: mainColor,
+      dark: darkShade,
       contrastText: "#fff",
     },
   },
