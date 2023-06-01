@@ -79,7 +79,7 @@ function Signup() {
 		};
 
 		try {
-			const res = await axios.post("/signup", newUserData);
+			const res = await axios.post("https://us-central1-todo-83183.cloudfunctions.net/api/signup", newUserData);
 			localStorage.setItem("AuthToken", res.data.token);
 			setLoading(false);
 			history("/");

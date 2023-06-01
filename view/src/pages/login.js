@@ -62,7 +62,7 @@ function Login() {
 		const userData = { email, password };
 
 		try {
-			const res = await axios.post("/login", userData);
+			const res = await axios.post("https://us-central1-todo-83183.cloudfunctions.net/api/login", userData);
 			localStorage.setItem("AuthToken", `Bearer ${res.data.token}`);
 			setLoading(false);
 			history("/");

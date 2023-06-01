@@ -77,7 +77,7 @@ const Account = (props) => {
     const authToken = localStorage.getItem("AuthToken");
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
-      .get("/user")
+      .get("https://us-central1-todo-83183.cloudfunctions.net/api/user")
       .then((response) => {
         setState((prevState) => ({
           ...prevState,
@@ -125,7 +125,7 @@ const Account = (props) => {
     form_data.append("content", state.content);
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
-      .post("/user/image", form_data, {
+      .post("https://us-central1-todo-83183.cloudfunctions.net/api/user/image", form_data, {
         headers: {
           "content-type": "multipart/form-data",
         },
@@ -160,7 +160,7 @@ const Account = (props) => {
       country: state.country,
     };
     axios
-      .post("/user", formRequest)
+      .post("https://us-central1-todo-83183.cloudfunctions.net/api/user", formRequest)
       .then(() => {
         setState((prevState) => ({
           ...prevState,

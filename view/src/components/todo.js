@@ -108,7 +108,7 @@ const Todo = (props) => {
     const authToken = localStorage.getItem("AuthToken");
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
-      .get("/todos")
+      .get("https://us-central1-todo-83183.cloudfunctions.net/api/todos")
       .then((response) => {
         setState((prevState) => ({
           ...prevState,
@@ -133,7 +133,7 @@ const Todo = (props) => {
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     let todoId = data.todo.todoId;
     axios
-      .delete(`todo/${todoId}`)
+      .delete(`https://us-central1-todo-83183.cloudfunctions.net/api/todo/${todoId}`)
       .then(() => {
         window.location.reload();
       })
@@ -204,13 +204,13 @@ const Todo = (props) => {
     let options = {};
     if (state.buttonType === "Edit") {
       options = {
-        url: `/todo/${state.todoId}`,
+        url: `https://us-central1-todo-83183.cloudfunctions.net/api/todo/${state.todoId}`,
         method: "put",
         data: userTodo,
       };
     } else {
       options = {
-        url: "/todo",
+        url: "https://us-central1-todo-83183.cloudfunctions.net/api/todo",
         method: "post",
         data: userTodo,
       };

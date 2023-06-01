@@ -73,7 +73,7 @@ const Home = (props) => {
     const authToken = localStorage.getItem("AuthToken");
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
-      .get("/user")
+      .get("https://us-central1-todo-83183.cloudfunctions.net/api/user")
       .then((response) => {
         setState((prevState) => ({
           ...prevState,
