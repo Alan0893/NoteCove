@@ -10,8 +10,6 @@ const { initializeApp } = require("firebase/app");
 const app = initializeApp(config);
 const auth = getAuth(app);
 const { validateLoginData, validateSignUpData } = require("../util/validators");
-const { QuerySnapshot } = require("firebase-admin/firestore");
-const { send } = require("process");
 
 exports.loginUser = (request, response) => {
   const user = {
