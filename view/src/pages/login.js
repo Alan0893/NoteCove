@@ -76,6 +76,17 @@ function Login() {
 		}
 	};
 
+	const isEmail = (email) => {
+		const emailRegEx =
+			/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		if (email.match(emailRegEx)) return true;
+		else return false;
+	}; 
+	const validPassword = (password) => {
+		if (password.length < 8) return false;
+		else return true;
+	}
+	
 	return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
@@ -121,7 +132,7 @@ function Login() {
 						variant="contained"
 						color="primary"
 						onClick={handleSubmit}
-						disabled={loading || !email || !password}
+						disabled={loading || !isEmail(email) || !validPassword(password)}
 					>
 						Sign In
 						{loading && <Progress size={30} />}

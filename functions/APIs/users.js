@@ -9,6 +9,7 @@ const { initializeApp } = require("firebase/app");
 const app = initializeApp(config);
 const auth = getAuth(app);
 const { validateLoginData, validateSignUpData } = require("../util/validators");
+const { QuerySnapshot } = require("firebase-admin/firestore");
 
 exports.loginUser = (request, response) => {
   const user = {
@@ -19,19 +20,29 @@ exports.loginUser = (request, response) => {
   const { valid, errors } = validateLoginData(user);
   if (!valid) return response.status(400).json(errors);
 
-  signInWithEmailAndPassword(auth, user.email, user.password)
-    .then((userCredential) => {
-      return userCredential.user.getIdToken();
+  const userRef = db.collection("users").where("email", "==", user.email).limit(1);
+  userRef.get()
+    .then((querySnapshot) => {
+      if(querySnapshot.empty) {
+        return response.status(403).json({
+          general: "Invalid email. User does not exist."
+        })
+      } else {
+        signInWithEmailAndPassword(auth, user.email, user.password)
+          .then((userCredential) => {
+            return userCredential.user.getIdToken();
+          })
+          .then((token) => {
+            return response.json({ token });
+          })
+          .catch((error) => {
+            console.error(error);
+            return response.status(403).json({
+              general: "Wrong credentials. Try again.",
+            });
+          });
+      }
     })
-    .then((token) => {
-      return response.json({ token });
-    })
-    .catch((error) => {
-      console.error(error);
-      return response.status(403).json({
-        general: "Wrong credentials. Try again.",
-      });
-    });
 };
 
 exports.signUpUser = (request, response) => {
