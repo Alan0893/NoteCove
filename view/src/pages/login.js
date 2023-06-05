@@ -138,9 +138,12 @@ function Login() {
 						{loading && <Progress size={30} />}
 					</SubmitButton>
 					<Grid container>
-						<Grid item>
-							<Link href="signup" variant="body2">
-								{"Don't have an account? Sign Up!"}
+						<Grid>
+							<Link href="signup" variant="body2" style={{ display: 'block' }}>
+								{"Create account!"}
+							</Link>
+							<Link href="reset" variant="body2" style={{ display: 'block' }}>
+								{"Forgot password?"}
 							</Link>
 						</Grid>
 					</Grid>
