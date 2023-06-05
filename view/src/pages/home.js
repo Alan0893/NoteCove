@@ -39,12 +39,12 @@ const Content = styled("div")(({ theme }) => ({
 }));
 const CustomAvatar = styled(Avatar)({
   height: 110,
-  width: 100,
+  width: 110,
   flexShrink: 0,
   flexGrow: 0,
   marginTop: 20,
 });
-const UiProgress = styled(CircularProgress)(({ theme }) => ({
+const UiProgress = styled(CircularProgress)(({
   position: "fixed",
   zIndex: "1000",
   height: "31px",
@@ -88,7 +88,7 @@ const Home = (props) => {
         }));
       })
       .catch((error) => {
-        if (error.response.code === 403) {
+        if (error.response.status === 403) {
           navigate("/login");
         }
         setState((prevState) => ({
