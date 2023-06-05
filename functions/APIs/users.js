@@ -4,12 +4,14 @@ const {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail
 } = require("firebase/auth");
 const { initializeApp } = require("firebase/app");
 const app = initializeApp(config);
 const auth = getAuth(app);
 const { validateLoginData, validateSignUpData } = require("../util/validators");
 const { QuerySnapshot } = require("firebase-admin/firestore");
+const { send } = require("process");
 
 exports.loginUser = (request, response) => {
   const user = {
@@ -211,6 +213,40 @@ exports.updateUserDetails = (request, response) => {
       console.error(error);
       return response.status(500).json({
         message: "Cannot update the user details"
+      });
+    });
+};
+
+exports.resetPassword = (request, response) => {
+  const { email } = request.body;
+
+  db.collection("users")
+    .where("email", "==", email)
+    .get()
+    .then((querySnapshot) => {
+      if (querySnapshot.empty) {
+        return response.status(404).json({
+          error: "User with this email does not exist.",
+        });
+      } else {
+        sendPasswordResetEmail(email)
+          .then(() => {
+            return response.json({
+              message: "Password reset email sent successfully.",
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+            return response.status(500).json({
+              error: "Failed to send password reset email.",
+            });
+          });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      return response.status(500).json({
+        error: "Failed to check if the email exists.",
       });
     });
 };
