@@ -12,10 +12,10 @@ import {
 } from "@mui/material"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import styled from "@mui/system/styled";
-
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+// Styled Components
 const Paper = styled("div")(({ theme }) => ({
   marginTop: theme.spacing(8),
   display: "flex",
@@ -42,51 +42,63 @@ const Progress = styled(CircularProgress)({
   position: "absolute",
 });
 
-function Login() {
+// Login function
+const Login = () => {
+	// States of function components
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	
 	const [errors, setErrors] = useState({});
 	const [loading, setLoading] = useState(false);
 	
-	const history = useNavigate();
+	// Provide navigation to redirect to pages
+	const navigate = useNavigate();
 
-	const handleChange = (evt) => {
-		const { name, value } = evt.target;
+	// Update value as user is inputting value
+	const handleChange = (event) => {
+		const { name, value } = event.target;
 		if(name === "email") setEmail(value)
 		if(name === "password") setPassword(value);
 	};
-	const handleSubmit = async (evt) => {
-		evt.preventDefault();
-		setLoading(true);
-		const userData = { email, password };
+	// Handle when user submits request
+	const handleSubmit = async (event) => {
+		event.preventDefault();	// Prevent the default form submission behavior
+		setLoading(true);	// Set loading state to true
+
+		const userData = { email, password };	// Prepare the user data for login
 
 		try {
+			// Send a POST request to the login API endpoint with the user data
 			const res = await axios.post("https://us-central1-todo-83183.cloudfunctions.net/api/login", userData);
+			// Store the received authentication token in local storage
 			localStorage.setItem("AuthToken", `Bearer ${res.data.token}`);
-			setLoading(false);
-			history("/");
+			setLoading(false);	// Set loading state to false
+			navigate("/");	// Redirect to the home page
 		} catch (err) {
 			if (err.response) {
+				// Set the error state with the error data from the response
 				setErrors(err.response.data);
-			} else {
+			} else {	// Unexpected Error
 				console.error(err);
 			}
+			// Set loading state to false
 			setLoading(false);
 		}
 	};
 
+	// Check if the inputted email is valid
 	const isEmail = (email) => {
 		const emailRegEx =
 			/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 		if (email.match(emailRegEx)) return true;
 		else return false;
 	}; 
+	// Check if the inputted password is valid
 	const validPassword = (password) => {
 		if (password.length < 6) return false;
 		else return true;
 	}
 	
+	// Render the login page
 	return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />

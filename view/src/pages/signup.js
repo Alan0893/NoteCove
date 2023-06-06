@@ -19,6 +19,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import styled from "@mui/system/styled";
 import { useNavigate } from "react-router-dom";
 
+// Styled Components
 const Paper = styled("div")(({ theme }) => ({
 	marginTop: theme.spacing(8),
 	display: "flex",
@@ -40,13 +41,15 @@ const Progress = styled(CircularProgress)({
   	position: "absolute",
 });
 
+// Array of available countries
 const countries = [
 	"United States",
 	"Canada",
-	"Mexico",
 ];
 
-function Signup() {
+// Signup function
+const Signup = () => {
+	// States of function components
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
@@ -59,10 +62,12 @@ function Signup() {
 	const [errors, setErrors] = useState({});
 	const [loading, setLoading] = useState(false);
 
-	const history = useNavigate();
+	// Provide navigation to redirect to pages
+	const navigate = useNavigate();
 
-	const handleChange = (evt) => {
-		const { name, value } = evt.target;
+	// Updating states as user updates the input
+	const handleChange = (event) => {
+		const { name, value } = event.target;
 
 		if (name === "firstName") setFirstName(value);
 		if (name === "lastName") setLastName(value);
@@ -74,9 +79,11 @@ function Signup() {
 		if (name === "confirmPassword") setConfirmPassword(value);
 	};
 
+	// Handle when the user submits the data
 	const handleSubmit = async (evt) => {
+		// Prevent the default form submission behavior
 		evt.preventDefault();
-		setLoading(true);
+		setLoading(true);	// Setting the loading state to true
 		const newUserData = {
 			firstName,
 			lastName,
@@ -86,26 +93,31 @@ function Signup() {
 			email,
 			password,
 			confirmPassword,
-		};
+		};	// Prepare the new user data for signup
 
 		try {
+			// Send a POST request to the signup API endpoint with the new user data
 			const res = await axios.post(
 				"https://us-central1-todo-83183.cloudfunctions.net/api/signup",
 				newUserData
 			);
+			// Store the received authentication token
 			localStorage.setItem("AuthToken", res.data.token);
-			setLoading(false);
-			history("/");
+			setLoading(false);	// Set loading state to false
+			navigate("/");	// Navigate to the home page
 		} catch (err) {
 			if (err.response) {
+				// Set the error state with the error data from the response
 				setErrors(err.response.data);
-			} else {
+			} else {	// Unexpected error
 				console.error(err);
 			}
+			// Set loading state to false
 			setLoading(false);
 		}
   	};
 
+	// Render the signup page
 	return (
 		<Container component="main" maxWidth="xs">
 		<CssBaseline />

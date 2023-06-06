@@ -23,6 +23,7 @@ import { authMiddleWare } from "../util/auth";
 
 const drawerWidth = 240;
 
+// Styled Components
 const Root = styled("div")({
   display: "flex",
 });
@@ -56,7 +57,9 @@ const ToolbarSpacing = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
+// Home function 
 const Home = (props) => {
+  // States of function components
   const [state, setState] = useState({
     firstName: "",
     lastName: "",
@@ -66,15 +69,19 @@ const Home = (props) => {
     render: false,
   });
 
+  // Provide navigation to redirect to pages
   const navigate = useNavigate();
 
+  // After render
   useEffect(() => {
-    authMiddleWare(navigate);
-    const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    // Validate user authentication and retrieve user data 
+    authMiddleWare(navigate); // Middleware to check if the user is authenticated
+    const authToken = localStorage.getItem("AuthToken");  // Retrieve the authentication token from local storage
+    axios.defaults.headers.common = { Authorization: `${authToken}` };  // Set the authorization header for axios request
     axios
-      .get("https://us-central1-todo-83183.cloudfunctions.net/api/user")
-      .then((response) => {
+      .get("https://us-central1-todo-83183.cloudfunctions.net/api/user")  // Make a GET request
+      .then((response) => { 
+        // Handle successful response
         setState((prevState) => ({
           ...prevState,
           firstName: response.data.userCredentials.firstName,
@@ -83,14 +90,16 @@ const Home = (props) => {
           phoneNumber: response.data.userCredentials.phoneNumber,
           country: response.data.userCredentials.country,
           username: response.data.userCredentials.username,
-          uiLoading: false,
+          uiLoading: false, // Set uiLoading  to false once the data is loaded
           profilePicture: response.data.userCredentials.imageUrl,
         }));
       })
       .catch((error) => {
+        // Handle error response
         if (error.response.status === 403) {
-          navigate("/login");
+          navigate("/login"); // If the user is not authenticated, navigate to the login page
         }
+        // Set the errorMessage state
         setState((prevState) => ({
           ...prevState,
           errorMsg: "Error in retrieving the data",
@@ -98,26 +107,30 @@ const Home = (props) => {
       });
   }, [props.history, navigate]);
 
+  // Setting the render state to true
   const loadAccountPage = () => {
     setState((prevState) => ({ ...prevState, render: true }));
   };
-
+  // Setting the render state to false
   const loadTodoPage = () => {
     setState((prevState) => ({ ...prevState, render: false }));
   };
-
+  // Handling when the user logs out
   const logoutHandler = () => {
+    // Removing the Authorization Token from the local storage
     localStorage.removeItem("AuthToken");
+    // Redirecting to login page
     navigate("/login");
   };
 
-  if (state.uiLoading) {
+  if (state.uiLoading) {  // The UI is still loading
+    // Show the loading spinner while the UI is loading
     return (
       <Root>
         <UiProgress size={150}/>
       </Root>
     );
-  } else {
+  } else {  // Render the home page once the UI is loaded
     return (
       <Root>
         <CssBaseline />

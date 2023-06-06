@@ -15,6 +15,7 @@ import styled from "@mui/system/styled";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+// Styled Components
 const Paper = styled("div")(({ theme }) => ({
   marginTop: theme.spacing(8),
   display: "flex",
@@ -32,49 +33,52 @@ const Form = styled("form")(({ theme }) => ({
 const SubmitButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(3, 0, 2),
 }));
-const CustomError = styled(Typography)(({ theme }) => ({
-  color: theme.palette.error.main,
-  fontSize: "0.8rem",
-  marginTop: 10,
-}));
 const Progress = styled(CircularProgress)({
   position: "absolute",
 });
 
-function Reset() {
+// Reset function
+const Reset = () => {
+  // States of function components
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [resetSent, setResetSent] = useState(false);
 
-  const history = useNavigate();
+  // Provide navigation to redirect to pages
+  const navigate = useNavigate();
 
-  const handleChange = (evt) => {
-    setEmail(evt.target.value);
+  // Update email as user inputs the value
+  const handleChange = (event) => {
+    setEmail(event.target.value);
   };
-
-  const handleSubmit = async (evt) => {
-    evt.preventDefault();
+  // Handle when user submits the request
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
 
     try {
+      // Send a POST request to the reset password API endpoint with the user data
       await axios.post(
         "https://us-central1-todo-83183.cloudfunctions.net/api/reset",
         { email }
       );
-      setResetSent(true);
+      setResetSent(true); // Set the resetSent state to true
       setError("");
     } catch (err) {
       if (err.response) {
-        setError(err.response.data.error);
-      } else {
+        // Set the error state with the error data from the response
+        setError(err.response.data);
+      } else {  // Unexpected Error
         console.error(err);
       }
     } finally {
+      // Set the loading state to false regardless
       setLoading(false);
     }
   };
 
+  //  Check if provided email is valid
   const isEmail = (email) => {
     const emailRegEx =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -82,10 +86,12 @@ function Reset() {
     else return false;
   };
 
+  // Navigate back to login page
   const handleBackToLogin = () => {
-    history("/login");
+    navigate("/login");
   };
 
+  //  Render the reset password page
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
