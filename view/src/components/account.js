@@ -86,6 +86,7 @@ const Account = (props) => {
           phoneNumber: response.data.userCredentials.phoneNumber,
           country: response.data.userCredentials.country,
           username: response.data.userCredentials.username,
+          email: response.data.userCredentials.email,
           uiLoading: false
         }));
       })
@@ -298,6 +299,7 @@ const Account = (props) => {
                     label="Country"
                     margin="dense"
                     name="country"
+                    disabled={true}
                     variant="outlined"
                     value={state.country}
                     onChange={handleChange}
