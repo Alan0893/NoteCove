@@ -48,7 +48,7 @@ exports.validateSignUpData = (data) => {
   if (isEmpty(data.country)) errors.country = "Must not be empty";
 
   if (isEmpty(data.password)) errors.password = "Must not be empty";
-  if (data.password.length < 8) errors.password = "Must be at least 8 characters in length"
+  if (data.password.length < 6) errors.password = "Must be at least 6 characters in length"
   if (data.password !== data.confirmPassword)
     errors.confirmPassword = "Passwords must be the same";
   if (isEmpty(data.username)) errors.username = "Must not be empty";

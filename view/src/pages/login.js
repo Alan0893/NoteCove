@@ -83,7 +83,7 @@ function Login() {
 		else return false;
 	}; 
 	const validPassword = (password) => {
-		if (password.length < 8) return false;
+		if (password.length < 6) return false;
 		else return true;
 	}
 	
