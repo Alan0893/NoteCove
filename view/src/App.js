@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
+import Reset from "./pages/reset";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { lighten, darken } from "@mui/material/styles"
@@ -41,6 +42,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/reset" element={<Reset />} />
           </Routes>
         </div>
       </BrowserRouter>
