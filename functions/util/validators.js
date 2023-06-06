@@ -31,6 +31,13 @@ const isPhoneNumber = (phoneNumber) => {
   if (phoneNumber.match(phoneRegex)) return true;
   else return false;
 };
+const isValidUsername = (username) => {
+  const userRegex = 
+    // Regex to validate a username format
+    /^[A-Za-z][A-Za-z0-9_]{3,20}$/;
+  if (username.match(userRegex)) return true;
+  else return false;  
+}
 
 exports.validateSignUpData = (data) => {
   let errors = {};
@@ -48,16 +55,20 @@ exports.validateSignUpData = (data) => {
     errors.phoneNumber = "Must be a valid phone number";
   }
 
+  if (isEmpty(data.username)) {
+    errors.username = "Must not be empty";
+  } else if(!isValidUsername(data.username)) {
+    errors.username = "Must be at 4 characters in length";
+  }
+
   if (isEmpty(data.firstName)) errors.firstName = "Must not be empty";
   if (isEmpty(data.lastName)) errors.lastName = "Must not be empty";
-  if (isEmpty(data.phoneNumber)) errors.phoneNumber = "Must not be empty";
   if (isEmpty(data.country)) errors.country = "Must not be empty";
 
   if (isEmpty(data.password)) errors.password = "Must not be empty";
   if (data.password.length < 6) errors.password = "Must be at least 6 characters in length"
   if (data.password !== data.confirmPassword)
     errors.confirmPassword = "Passwords must be the same";
-  if (isEmpty(data.username)) errors.username = "Must not be empty";
 
   return {
     errors,
