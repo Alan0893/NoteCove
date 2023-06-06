@@ -1,4 +1,5 @@
 const isEmpty = (string) => {
+  // Check if the string is empty or consists only of whitespace characters
   if (string.trim() === "") return true;
   else return false;
 };
@@ -6,6 +7,7 @@ const isEmpty = (string) => {
 exports.validateLoginData = (data) => {
   let errors = {};
 
+  // Validate the login data
   if (isEmpty(data.email)) errors.email = "Must not be empty";
   if (isEmpty(data.password)) errors.password = "Must not be empty";
 
@@ -17,12 +19,15 @@ exports.validateLoginData = (data) => {
 
 const isEmail = (email) => {
   const emailRegEx =
+    // Regex to validate an email address format
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (email.match(emailRegEx)) return true;
   else return false;
 };
 const isPhoneNumber = (phoneNumber) => {
-  const phoneRegex = /^(\+0?1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/;
+  const phoneRegex = 
+    // Regex to validate a phone number format
+    /^(\+0?1\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$/;
   if (phoneNumber.match(phoneRegex)) return true;
   else return false;
 };
@@ -30,6 +35,7 @@ const isPhoneNumber = (phoneNumber) => {
 exports.validateSignUpData = (data) => {
   let errors = {};
 
+  // Validate the sign-up data
   if (isEmpty(data.email)) {
     errors.email = "Must not be empty";
   } else if (!isEmail(data.email)) {
