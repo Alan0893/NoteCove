@@ -16,8 +16,7 @@ import {
   CircularProgress,
   CardContent,
   DialogTitle,
-  DialogContent,
-  Paper,
+  DialogContent
 } from "@mui/material";
 import { AddCircle, Close } from "@mui/icons-material";
 import dayjs from "dayjs";
@@ -25,6 +24,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { authMiddleWare } from "../util/auth";
 import { useNavigate } from "react-router-dom";
 
+// Styled Components
 const Content = styled("main")(({ theme }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
@@ -74,10 +74,6 @@ const UiProgress = styled(CircularProgress)({
   left: "50%",
   top: "35%",
 });
-const ViewRoot = styled(DialogContent)(({ theme }) => ({
-  margin: 0,
-  padding: theme.spacing(2),
-}));
 const CloseButton = styled(IconButton)(({ theme }) => ({
   position: "absolute",
   right: theme.spacing(1),
@@ -85,11 +81,14 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.grey[500],
 }));
 
+// Creating a transition for props to slide up
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+// Todo function
 const Todo = (props) => {
+  // States of function components
   const [state, setState] = useState({
     todos: "",
     title: "",
@@ -101,47 +100,57 @@ const Todo = (props) => {
     buttonType: "",
     viewOpen: false,
   });
+
+  // Provide navigation to redirect to pages
   const navigate = useNavigate();
 
+  // After render
   useEffect(() => {
-    authMiddleWare(props.history);
-    const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    authMiddleWare(props.history);  // Middleware to check if the user is authenticated
+    const authToken = localStorage.getItem("AuthToken");  // Retrieve the authentication token from local storage
+    axios.defaults.headers.common = { Authorization: `${authToken}` };  // Set the authorization header for the axios request
     axios
-      .get("https://us-central1-todo-83183.cloudfunctions.net/api/todos")
+      .get("https://us-central1-todo-83183.cloudfunctions.net/api/todos") // Make a GET request
       .then((response) => {
+        // Handle successful response
         setState((prevState) => ({
           ...prevState,
           todos: response.data,
           uiLoading: false,
-        }));
+        }));  // Set uiLoading to false once the data is loaded
       })
       .catch((error) => {
         console.log(error);
       });
   }, [props.history]);
 
+  // Update value of states
   const handleChange = (event) => {
     setState({
       ...state,
       [event.target.name]: event.target.value,
     });
   };
+  // Handler to delete todo items
   const deleteTodoHandler = (data) => {
-    authMiddleWare(props.history);
-    const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    authMiddleWare(props.history);  // Validate authentication middleware
+    const authToken = localStorage.getItem("AuthToken");  // Get the authentication token from local storage
+    axios.defaults.headers.common = { Authorization: `${authToken}` }; // Set the authentication token in the request header
     let todoId = data.todo.todoId;
     axios
+      // Deleting the todo item from the database collection
       .delete(`https://us-central1-todo-83183.cloudfunctions.net/api/todo/${todoId}`)
       .then(() => {
+        // Reload the page after successfully deleting the todo
         window.location.reload();
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  // Handle editing todo items
   const handleEditClickOpen = (data) => {
+    // Updating the states as user is inputting the value
     setState((prevState) => ({
       ...prevState,
       title: data.todo.title,
@@ -151,6 +160,7 @@ const Todo = (props) => {
       open: true,
     }));
   };
+  // Handle when user views the todo item
   const handleViewOpen = (data) => {
     setState((prevState) => ({
       ...prevState,
@@ -160,6 +170,7 @@ const Todo = (props) => {
     }));
   };
 
+  // Creating a custom dialog for the todo item popup
   const CustomDialogTitle = (props) => {
     const { children, onClose } = props;
     return (
@@ -177,13 +188,18 @@ const Todo = (props) => {
     );
   };
 
+  // Styling the dialog popup
   const CustomDialogContent = styled(DialogContent)(({ theme }) => ({
     padding: theme.spacing(2)
   }))
 
+  // Getting the relative time from creation
   dayjs.extend(relativeTime);
+
+  // Getting the states
   const { open, errors, viewOpen } = state;
 
+  // Handle when user opens the todo item
   const handleClickOpen = () => {
     setState((prevState) => ({
       ...prevState,
@@ -194,14 +210,19 @@ const Todo = (props) => {
       open: true,
     }));
   };
+  // Handler for when user submits the todo edit/creation
   const handleSubmit = (event) => {
-    authMiddleWare(props.history);
-    event.preventDefault();
+    authMiddleWare(props.history);  // Validate authentication middleware
+    event.preventDefault(); // Prevent default form submission behavior
+
+    // Prepare the new user todo item 
     const userTodo = {
       title: state.title,
       body: state.body,
     };
     let options = {};
+
+    // Setting the request options depending if user is editing or creating a todo item
     if (state.buttonType === "Edit") {
       options = {
         url: `https://us-central1-todo-83183.cloudfunctions.net/api/todo/${state.todoId}`,
@@ -215,15 +236,15 @@ const Todo = (props) => {
         data: userTodo,
       };
     }
-    const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    const authToken = localStorage.getItem("AuthToken");  // Getting the authentication token from local storage
+    axios.defaults.headers.common = { Authorization: `${authToken}` };  // Set the authorization header for axios request
     axios(options)
       .then(() => {
         setState((prevState) => ({
           ...prevState,
           open: false,
         }));
-        window.location.reload();
+        window.location.reload(); // Reload the page after successful submission
       })
       .catch((error) => {
         setState((prevState) => ({
@@ -233,12 +254,14 @@ const Todo = (props) => {
         }));
       });
   };
+  // Handler for closing the view
   const handleViewClose = () => {
     setState((prevState) => ({
       ...prevState,
       viewOpen: false,
     }));
   };
+  // Handler for closing the form
   const handleClose = (evemt) => {
     setState((prevState) => ({
       ...prevState,
@@ -246,7 +269,8 @@ const Todo = (props) => {
     }));
   };
 
-  if (state.uiLoading) {
+  if (state.uiLoading) {  // The UI is still loading
+    // Show the loading spinner while the UI is loading
     return (
       <Content>
         <CustomToolbar>
@@ -254,7 +278,7 @@ const Todo = (props) => {
         </CustomToolbar>
       </Content>
     );
-  } else {
+  } else {  // Render the component on the page once the UI is loaded
     return (
       <Content>
         <CustomToolbar />

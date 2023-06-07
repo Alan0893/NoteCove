@@ -13,10 +13,10 @@ import {
   TextField,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-
 import { useNavigate } from "react-router-dom";
 import { authMiddleWare } from "../util/auth";
 
+// Styled Components
 const Content = styled("main")(({ theme }) => ({
   flexGrow: 1,
   padding: theme.spacing(3)
@@ -57,7 +57,9 @@ const SubmitButton = styled(Button)({
   marginTop: "10px",
 });
 
+// Account functionn
 const Account = (props) => {
+  // States of function components
   const [state, setState] = useState({
     firstName: "",
     lastName: "",
@@ -70,15 +72,19 @@ const Account = (props) => {
     buttonLoading: false,
     imageError: ""
   });
+
+  // Provide navigation to redirect to pages
   const navigate = useNavigate();
 
+  // After render
   useEffect(() => {
-    authMiddleWare(props.history);
-    const authToken = localStorage.getItem("AuthToken");
-    axios.defaults.headers.common = { Authorization: `${authToken}` };
+    authMiddleWare(props.history); // Middleware to check if the user is authenticated
+    const authToken = localStorage.getItem("AuthToken");  // Retrieve the authentication token from local storage
+    axios.defaults.headers.common = { Authorization: `${authToken}` }; // Set the authorization header for the axios request
     axios
-      .get("https://us-central1-todo-83183.cloudfunctions.net/api/user")
+      .get("https://us-central1-todo-83183.cloudfunctions.net/api/user")  // Make a GET request
       .then((response) => {
+        // Handle successful response
         setState((prevState) => ({
           ...prevState,
           firstName: response.data.userCredentials.firstName,
@@ -87,13 +93,14 @@ const Account = (props) => {
           country: response.data.userCredentials.country,
           username: response.data.userCredentials.username,
           email: response.data.userCredentials.email,
-          uiLoading: false
+          uiLoading: false  // Set uiLoading to false once the data is loaded
         }));
       })
       .catch((error) => {
         if (error.response.status === 403) {
-          navigate("/login");
+          navigate("/login"); // If the user is not authenticated, navigate to login page
         }
+        //Set the errorMessage state
         setState((prevState) => ({
           ...prevState,
           errorMsg: "Error in retrieving the data"
@@ -101,43 +108,52 @@ const Account = (props) => {
       });
   }, [props.history, navigate]);
 
+  // Update value of states
   const handleChange = (event) => {
     setState({
       ...state,
       [event.target.name]: event.target.value,
     });
   };
-  const handleImageChange = (evt) => {
+  // Update state of image
+  const handleImageChange = (event) => {
     setState({
       ...state,
-      image: evt.target.files[0],
+      image: event.target.files[0],
     });
   };
-  const profilePictureHandler = (evt) => {
-    evt.preventDefault();
+  // Handler function for updating profile picture
+  const profilePictureHandler = (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
     setState((prevState) => ({
       ...prevState,
       uiLoading: true,
-    }));
-    authMiddleWare(props.history);
-    const authToken = localStorage.getItem("AuthToken");
+    }));  // Set the loading state to true
+    authMiddleWare(props.history);  // Validate authentication middleware
+    const authToken = localStorage.getItem("AuthToken");  // Get the authentication token from local storage
+
+    // Create a new form data object and append the image and content data
     let form_data = new FormData();
     form_data.append("image", state.image);
     form_data.append("content", state.content);
+
+    // Set the authentication token in the request header
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
       .post("https://us-central1-todo-83183.cloudfunctions.net/api/user/image", form_data, {
         headers: {
-          "content-type": "multipart/form-data",
+          "content-type": "multipart/form-data",  // Sending files
         },
       })
       .then(() => {
+        //  Reload the page after successfully updating the profile picture
         window.location.reload();
       })
       .catch((err) => {
         if (err.response.status === 403) {
-          navigate("/login");
+          navigate("/login"); // Redirect to the login page if the authentication fails
         }
+        //  Set the error message if there is an error in posting the data
         setState((prevState) => ({
           ...prevState,
           uiLoading: false,
@@ -145,14 +161,17 @@ const Account = (props) => {
         }));
       });
   };
+  // Handler function for updating form values
   const updateFormValues = (evt) => {
-    evt.preventDefault();
+    evt.preventDefault(); // Prevent default form submission behavior
     setState((prevState) => ({
       ...prevState,
-      buttonLoading: true,
+      buttonLoading: true,  // Set the loading state to true
     }));
-    authMiddleWare(props.history);
-    const authToken = localStorage.getItem("AuthToken");
+    authMiddleWare(props.history);  // Validate authentication middleware
+    const authToken = localStorage.getItem("AuthToken");  // Get the authentication token from local storage
+
+    // Set the authentication token in the request header
     axios.defaults.headers.common = { Authorization: `${authToken}` };
 
     const formRequest = {
@@ -166,22 +185,23 @@ const Account = (props) => {
         setState((prevState) => ({
           ...prevState,
           buttonLoading: false
-        }));
-        window.location.reload();
+        }));  // Set button loading state to false
+        window.location.reload(); // Reload the page after successfully updating the form values
       })
       .catch((err) => {
         if (err.response.status === 403) {
-          navigate("/login");
+          navigate("/login"); // Redirect to the login page if the authentication failed
         }
         setState((prevState) => ({
           ...prevState,
           buttonLoading: false,
-        }));
+        }));  // Set button loading state to false
       });
   };
 
-  if (state.uiLoading === true) {
-    return (
+  if (state.uiLoading) {  // The UI is still loading
+    // Show the loading spinner while the UI is loading
+    return ( 
       <Content>
         <Toolbar />
         {state.uiLoading && (
@@ -189,7 +209,7 @@ const Account = (props) => {
         )}
       </Content>
     );
-  } else {
+  } else {  // Render the component on the page once the UI is loaded 
     return (
       <Content>
         <Toolbar />

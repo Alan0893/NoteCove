@@ -90,7 +90,7 @@ const Home = (props) => {
           phoneNumber: response.data.userCredentials.phoneNumber,
           country: response.data.userCredentials.country,
           username: response.data.userCredentials.username,
-          uiLoading: false, // Set uiLoading  to false once the data is loaded
+          uiLoading: false, // Set uiLoading to false once the data is loaded
           profilePicture: response.data.userCredentials.imageUrl,
         }));
       })
