@@ -18,6 +18,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import styled from "@mui/system/styled";
 import { useNavigate } from "react-router-dom";
+import config from "../util/config";
 
 // Styled Components
 const Paper = styled("div")(({ theme }) => ({
@@ -66,9 +67,7 @@ const Signup = () => {
 	const navigate = useNavigate();
 
 	// Updating states as user updates the input
-	const handleChange = (event) => {
-		const { name, value } = event.target;
-
+	const handleChange = ({target: { name, value }}) => {
 		if (name === "firstName") setFirstName(value);
 		if (name === "lastName") setLastName(value);
 		if (name === "phoneNumber") setPhoneNumber(value);
@@ -98,7 +97,7 @@ const Signup = () => {
 		try {
 			// Send a POST request to the signup API endpoint with the new user data
 			const res = await axios.post(
-				"https://us-central1-todo-83183.cloudfunctions.net/api/signup",
+				`${config.API_URL}/signup`,
 				newUserData
 			);
 			// Store the received authentication token
@@ -164,7 +163,7 @@ const Signup = () => {
 								required
 								fullWidth
 								id="username"
-								label="User Name"
+								label="Username"
 								name="username"
 								autoComplete="username"
 								helperText={errors.username}
@@ -261,6 +260,7 @@ const Signup = () => {
 						loading ||
 						!email ||
 						!password ||
+						!confirmPassword ||
 						!firstName ||
 						!lastName ||
 						!country ||

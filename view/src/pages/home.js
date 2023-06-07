@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import Account from "../components/account";
 import Todo from "../components/todo";
 import { authMiddleWare } from "../util/auth";
+import config from "../util/config";
 
 const drawerWidth = 240;
 
@@ -79,7 +80,7 @@ const Home = (props) => {
     const authToken = localStorage.getItem("AuthToken");  // Retrieve the authentication token from local storage
     axios.defaults.headers.common = { Authorization: `${authToken}` };  // Set the authorization header for axios request
     axios
-      .get("https://us-central1-todo-83183.cloudfunctions.net/api/user")  // Make a GET request
+      .get(`${config.API_URL}/user`)  // Make a GET request
       .then((response) => { 
         // Handle successful response
         setState((prevState) => ({

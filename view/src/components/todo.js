@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { authMiddleWare } from "../util/auth";
 import { useNavigate } from "react-router-dom";
+import config from "../util/config";
 
 // Styled Components
 const Content = styled("main")(({ theme }) => ({
@@ -110,7 +111,7 @@ const Todo = (props) => {
     const authToken = localStorage.getItem("AuthToken");  // Retrieve the authentication token from local storage
     axios.defaults.headers.common = { Authorization: `${authToken}` };  // Set the authorization header for the axios request
     axios
-      .get("https://us-central1-todo-83183.cloudfunctions.net/api/todos") // Make a GET request
+      .get(`${config.API_URL}/todos`) // Make a GET request
       .then((response) => {
         // Handle successful response
         setState((prevState) => ({
@@ -139,7 +140,7 @@ const Todo = (props) => {
     let todoId = data.todo.todoId;
     axios
       // Deleting the todo item from the database collection
-      .delete(`https://us-central1-todo-83183.cloudfunctions.net/api/todo/${todoId}`)
+      .delete(`${config.API_URL}/todo/${todoId}`)
       .then(() => {
         // Reload the page after successfully deleting the todo
         window.location.reload();

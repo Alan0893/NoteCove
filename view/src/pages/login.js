@@ -14,6 +14,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import styled from "@mui/system/styled";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import config from "../util/config";
 
 // Styled Components
 const Paper = styled("div")(({ theme }) => ({
@@ -68,7 +69,7 @@ const Login = () => {
 
 		try {
 			// Send a POST request to the login API endpoint with the user data
-			const res = await axios.post("https://us-central1-todo-83183.cloudfunctions.net/api/login", userData);
+			const res = await axios.post(`${config.API_URL}/login`, userData);
 			// Store the received authentication token in local storage
 			localStorage.setItem("AuthToken", `Bearer ${res.data.token}`);
 			setLoading(false);	// Set loading state to false

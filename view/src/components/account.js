@@ -15,6 +15,7 @@ import {
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useNavigate } from "react-router-dom";
 import { authMiddleWare } from "../util/auth";
+import config from "../util/config";
 
 // Styled Components
 const Content = styled("main")(({ theme }) => ({
@@ -82,7 +83,7 @@ const Account = (props) => {
     const authToken = localStorage.getItem("AuthToken");  // Retrieve the authentication token from local storage
     axios.defaults.headers.common = { Authorization: `${authToken}` }; // Set the authorization header for the axios request
     axios
-      .get("https://us-central1-todo-83183.cloudfunctions.net/api/user")  // Make a GET request
+      .get(`${config.API_URL}/user`)  // Make a GET request
       .then((response) => {
         // Handle successful response
         setState((prevState) => ({
@@ -140,7 +141,7 @@ const Account = (props) => {
     // Set the authentication token in the request header
     axios.defaults.headers.common = { Authorization: `${authToken}` };
     axios
-      .post("https://us-central1-todo-83183.cloudfunctions.net/api/user/image", form_data, {
+      .post(`${config.API_URL}/user/image`, form_data, {
         headers: {
           "content-type": "multipart/form-data",  // Sending files
         },
@@ -180,7 +181,7 @@ const Account = (props) => {
       country: state.country,
     };
     axios
-      .post("https://us-central1-todo-83183.cloudfunctions.net/api/user", formRequest)
+      .post(`${config.API_URL}/user`, formRequest)
       .then(() => {
         setState((prevState) => ({
           ...prevState,

@@ -14,6 +14,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import styled from "@mui/system/styled";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import config from "../util/config";
 
 // Styled Components
 const Paper = styled("div")(({ theme }) => ({
@@ -60,7 +61,7 @@ const Reset = () => {
     try {
       // Send a POST request to the reset password API endpoint with the user data
       await axios.post(
-        "https://us-central1-todo-83183.cloudfunctions.net/api/reset",
+        `${config.API_URL}/reset`,
         { email }
       );
       setResetSent(true); // Set the resetSent state to true
