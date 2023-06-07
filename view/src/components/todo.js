@@ -226,13 +226,13 @@ const Todo = (props) => {
     // Setting the request options depending if user is editing or creating a todo item
     if (state.buttonType === "Edit") {
       options = {
-        url: `https://us-central1-todo-83183.cloudfunctions.net/api/todo/${state.todoId}`,
+        url: `${config.API_URL}/todo/${state.todoId}`,
         method: "put",
         data: userTodo,
       };
     } else {
       options = {
-        url: "https://us-central1-todo-83183.cloudfunctions.net/api/todo",
+        url: `${config.API_URL}/todo`,
         method: "post",
         data: userTodo,
       };
