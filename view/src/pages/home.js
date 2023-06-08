@@ -96,15 +96,22 @@ const UiProgress = styled(CircularProgress)(({
 }));
 
 const Home = (props) => {
+  // Response Drawer function components
 	const theme = useTheme();
 	const [open, setOpen] = useState(false);
-
+  // Function to handle opening the drawer
 	const handleDrawerOpen = () => {
 		setOpen(true);
 	};
+  // Function to handle closing the drawer
 	const handleDrawerClose = () => {
 		setOpen(false);
 	};
+
+  // Hovering over <ListItemButton> Components function components
+  const [accountHover, setAccountHover] = useState(false);
+  const [todoHover, setTodoHover] = useState(false);
+  const [logoutHover, setLogoutHover] = useState(false);
 
 	// States of function components
   	const [state, setState] = useState({
@@ -169,6 +176,7 @@ const Home = (props) => {
 		// Redirecting to login page
 		navigate("/login");
 	};
+  console.log(window.innerWidth)
 
 	if (state.uiLoading) {
 		return (
@@ -229,16 +237,34 @@ const Home = (props) => {
 					<Divider />
 					<List>
 						<ListItem disablePadding>
-							<ListItemButton onClick={loadTodoPage}>
+							<ListItemButton onClick={loadTodoPage}
+                sx={{
+                  backgroundColor: todoHover ? "#f0f0f0" : "transparent",
+                  "&:hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }}
+                onMouseEnter={() => setTodoHover(true)}
+                onMouseLeave={() => setTodoHover(false)}
+              >
 								<ListItemIcon>
 									<Notes />
 								</ListItemIcon>
-								<ListItemText primary="Todo" />
+								<ListItemText primary="Tasks" />
 							</ListItemButton>
 						</ListItem>
 
 						<ListItem disablePadding>
-							<ListItemButton onClick={loadAccountPage}>
+							<ListItemButton onClick={loadAccountPage}
+                sx={{
+                  backgroundColor: accountHover ? "#f0f0f0" : "transparent",
+                  "&:hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }}
+                onMouseEnter={() => setAccountHover(true)}
+                onMouseLeave={() => setAccountHover(false)}
+              >
 								<ListItemIcon>
 									<AccountBox />
 								</ListItemIcon>
@@ -247,7 +273,16 @@ const Home = (props) => {
 						</ListItem>
 
 						<ListItem disablePadding>
-							<ListItemButton onClick={logoutHandler}>
+							<ListItemButton onClick={logoutHandler}
+                sx={{
+                  backgroundColor: logoutHover ? "#f0f0f0" : "transparent",
+                  "&:hover": {
+                    backgroundColor: "#f0f0f0",
+                  },
+                }}
+                onMouseEnter={() => setLogoutHover(true)}
+                onMouseLeave={() => setLogoutHover(false)}
+              >
 								<ListItemIcon>
 									<ExitToApp />
 								</ListItemIcon>
