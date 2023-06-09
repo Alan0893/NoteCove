@@ -99,6 +99,7 @@ const Todo = (props) => {
     uiLoading: true,
     buttonType: "",
     viewOpen: false,
+    col: 6
   });
 
   // After render
@@ -135,15 +136,15 @@ const Todo = (props) => {
     const screenWidth = window.innerWidth;
 
     // Update the number of todos per row based on screen width
-    if (screenWidth <= 1035) {
+    if (screenWidth >= 1035) {
       setState((prevState) => ({
         ...prevState,
-        col: 12
+        col: 6
       }))
     } else {
       setState((prevState) => ({
         ...prevState,
-        col: 6
+        col: 12
       }))
     }
   }
