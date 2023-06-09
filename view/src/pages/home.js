@@ -201,7 +201,7 @@ const Home = (props) => {
 						<Typography 
 							variant="h6"  
 							component="div"
-              noWrap
+              				noWrap
 						>
 							TaskEase
 						</Typography>
@@ -237,15 +237,15 @@ const Home = (props) => {
 					<List>
 						<ListItem disablePadding>
 							<ListItemButton onClick={loadTodoPage}
-                sx={{
-                  backgroundColor: todoHover ? "#f0f0f0" : "transparent",
-                  "&:hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }}
-                onMouseEnter={() => setTodoHover(true)}
-                onMouseLeave={() => setTodoHover(false)}
-              >
+								sx={{
+								backgroundColor: todoHover ? "#f0f0f0" : "transparent",
+								"&:hover": {
+									backgroundColor: "#f0f0f0",
+								},
+								}}
+								onMouseEnter={() => setTodoHover(true)}
+								onMouseLeave={() => setTodoHover(false)}
+              				>
 								<ListItemIcon>
 									<Notes />
 								</ListItemIcon>
@@ -255,15 +255,15 @@ const Home = (props) => {
 
 						<ListItem disablePadding>
 							<ListItemButton onClick={loadAccountPage}
-                sx={{
-                  backgroundColor: accountHover ? "#f0f0f0" : "transparent",
-                  "&:hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }}
-                onMouseEnter={() => setAccountHover(true)}
-                onMouseLeave={() => setAccountHover(false)}
-              >
+								sx={{
+								backgroundColor: accountHover ? "#f0f0f0" : "transparent",
+								"&:hover": {
+									backgroundColor: "#f0f0f0",
+								},
+								}}
+								onMouseEnter={() => setAccountHover(true)}
+								onMouseLeave={() => setAccountHover(false)}
+							>
 								<ListItemIcon>
 									<AccountBox />
 								</ListItemIcon>
@@ -273,15 +273,15 @@ const Home = (props) => {
 
 						<ListItem disablePadding>
 							<ListItemButton onClick={logoutHandler}
-                sx={{
-                  backgroundColor: logoutHover ? "#f0f0f0" : "transparent",
-                  "&:hover": {
-                    backgroundColor: "#f0f0f0",
-                  },
-                }}
-                onMouseEnter={() => setLogoutHover(true)}
-                onMouseLeave={() => setLogoutHover(false)}
-              >
+								sx={{
+								backgroundColor: logoutHover ? "#f0f0f0" : "transparent",
+								"&:hover": {
+									backgroundColor: "#f0f0f0",
+								},
+								}}
+								onMouseEnter={() => setLogoutHover(true)}
+								onMouseLeave={() => setLogoutHover(false)}
+							>
 								<ListItemIcon>
 									<ExitToApp />
 								</ListItemIcon>
