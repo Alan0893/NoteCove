@@ -176,7 +176,6 @@ const Home = (props) => {
 		// Redirecting to login page
 		navigate("/login");
 	};
-  console.log(window.innerWidth)
 
 	if (state.uiLoading) {
 		return (
@@ -200,9 +199,9 @@ const Home = (props) => {
 							<Menu />
 						</IconButton>
 						<Typography 
-							variant="h6" 
-							noWrap 
+							variant="h6"  
 							component="div"
+              noWrap
 						>
 							TaskEase
 						</Typography>

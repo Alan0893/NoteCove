@@ -175,8 +175,10 @@ const Todo = (props) => {
   const CustomDialogTitle = (props) => {
     const { children, onClose } = props;
     return (
-      <RootDialog disableTypography>
-        <Typography variant="h6">{children}</Typography>
+      <RootDialog disabletypography="true">
+        <div>
+          <Typography variant="h6">{children}</Typography>
+        </div>
         {onClose ? (
           <CloseButton
             aria-label="close"
@@ -423,7 +425,7 @@ const Todo = (props) => {
               rowsmax={25}
               value={state.body}
               InputProps={{
-                disableunderline: true,
+                disableunderline: "true",
               }}
             />
           </CustomDialogContent>
