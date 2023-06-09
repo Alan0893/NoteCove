@@ -27,7 +27,7 @@ import config from "../util/config";
 // Styled Components
 const Content = styled("main")(({ theme }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  padding: theme.spacing(0),
 }));
 const Appbar = styled(AppBar)({
   position: "relative",
