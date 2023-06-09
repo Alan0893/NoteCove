@@ -22,7 +22,6 @@ import { AddCircle, Close } from "@mui/icons-material";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { authMiddleWare } from "../util/auth";
-import { useNavigate } from "react-router-dom";
 import config from "../util/config";
 
 // Styled Components
@@ -102,9 +101,6 @@ const Todo = (props) => {
     viewOpen: false,
   });
 
-  // Provide navigation to redirect to pages
-  const navigate = useNavigate();
-
   // After render
   useEffect(() => {
     authMiddleWare(props.history);  // Middleware to check if the user is authenticated
@@ -123,7 +119,34 @@ const Todo = (props) => {
       .catch((error) => {
         console.log(error);
       });
+
+      // Add event listener for screen resize
+      window.addEventListener("resize", handleScreenResize);
+
+      // Clean up the event listener on component unmount
+      return () => {
+        window.removeEventListener("resize", handleScreenResize);
+      }
   }, [props.history]);
+
+  // Handler to handle screen resize
+  const handleScreenResize = () => {
+    // Get screen width
+    const screenWidth = window.innerWidth;
+
+    // Update the number of todos per row based on screen width
+    if (screenWidth <= 1035) {
+      setState((prevState) => ({
+        ...prevState,
+        col: 12
+      }))
+    } else {
+      setState((prevState) => ({
+        ...prevState,
+        col: 6
+      }))
+    }
+  }
 
   // Update value of states
   const handleChange = (event) => {
@@ -362,7 +385,7 @@ const Todo = (props) => {
 
         <Grid container spacing={2}>
           {state.todos.map((todo) => (
-            <Grid item xs={12} sm={6} key={todo.todoId}>
+            <Grid item xs={12} sm={state.col} key={todo.todoId}>
               <RootCard variant="outlined">
                 <CardContent>
                   <Typography variant="h5" component="h2">
