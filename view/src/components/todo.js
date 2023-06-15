@@ -99,7 +99,7 @@ const Todo = (props) => {
     uiLoading: true,
     buttonType: "",
     viewOpen: false,
-    col: 6
+    col: window.innerWidth >= 1035 ? 6 : 12
   });
 
   // After render
