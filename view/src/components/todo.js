@@ -333,7 +333,7 @@ const Todo = (props) => {
                 <Close />
               </IconButton>
               <Title variant="h6">
-                {state.buttonType === "Edit" ? "Edit Todo" : "Create new Todo"}
+                {state.buttonType === "Edit" ? "Edit Todo" : "Add Task"}
               </Title>
               <SubmitButton 
                 autoFocus 
@@ -352,10 +352,10 @@ const Todo = (props) => {
                   variant="outlined"
                   required
                   fullWidth
-                  id="todoTitle"
-                  label="Todo Title"
+                  id="taskTitle"
+                  label="Task"
                   name="title"
-                  autoComplete="todoTitle"
+                  autoComplete="taskTitle"
                   helperText={errors.title}
                   value={state.title}
                   error={errors.title ? true : false}
@@ -367,10 +367,10 @@ const Todo = (props) => {
                   variant="outlined"
                   required
                   fullWidth
-                  id="todoDetails"
-                  label="Todo Details"
+                  id="taskDetails"
+                  label="Task Details"
                   name="body"
-                  autoComplete="todoDetails"
+                  autoComplete="taskDetails"
                   multiline
                   rows={25}
                   rowsmax={25}
