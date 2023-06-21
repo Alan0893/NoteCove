@@ -8,7 +8,8 @@ import {
 	Grid,
 	Typography,
 	Container,
-	CircularProgress
+	CircularProgress,
+	Box
 } from "@mui/material"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import styled from "@mui/system/styled";
@@ -18,7 +19,7 @@ import config from "../util/config";
 
 // Styled Components
 const Paper = styled("div")(({ theme }) => ({
-  marginTop: theme.spacing(8),
+  marginTop: theme.spacing(0),
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -101,7 +102,29 @@ const Login = () => {
 	
 	// Render the login page
 	return (
-		<Container component="main" maxWidth="xs">
+		<Container 
+			component="main" 
+			maxWidth="xs"
+			sx={{
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				height: "100vh"
+			}}
+		>
+			<Box
+				sx={{
+					boxShadow: 4,
+					borderRadius: 2,
+					px: 4,
+					py: 6,
+					marginTop: 4,
+					marginBottom: 4,
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+				}}
+			>
 			<CssBaseline />
 			<Paper>
 				<StyledAvatar>
@@ -165,6 +188,7 @@ const Login = () => {
 					)}
 				</Form>
 			</Paper>
+			</Box>
 		</Container>
 	)
 }
