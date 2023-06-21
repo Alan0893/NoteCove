@@ -28,7 +28,7 @@ import {
 import { styled, useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Account from "../components/account";
-import Todo from "../components/todo";
+import Note from "../components/note";
 import { authMiddleWare } from "../util/auth";
 import config from "../util/config";
 
@@ -110,7 +110,7 @@ const Home = (props) => {
 
   // Hovering over <ListItemButton> Components function components
   const [accountHover, setAccountHover] = useState(false);
-  const [todoHover, setTodoHover] = useState(false);
+  const [noteHover, setNoteHover] = useState(false);
   const [logoutHover, setLogoutHover] = useState(false);
 
 	// States of function components
@@ -166,7 +166,7 @@ const Home = (props) => {
 		setState((prevState) => ({ ...prevState, render: true }));
 	};
 	// Setting the render state to false
-	const loadTodoPage = () => {
+	const loadNotePage = () => {
 		setState((prevState) => ({ ...prevState, render: false }));
 	};
 	// Handling when the user logs out
@@ -203,7 +203,7 @@ const Home = (props) => {
 							component="div"
               				noWrap
 						>
-							TaskEase
+							NoteCove
 						</Typography>
 					</Toolbar>
 				</AppBar>
@@ -236,15 +236,15 @@ const Home = (props) => {
 					<Divider />
 					<List>
 						<ListItem disablePadding>
-							<ListItemButton onClick={loadTodoPage}
+							<ListItemButton onClick={loadNotePage}
 								sx={{
-								backgroundColor: todoHover ? "#f0f0f0" : "transparent",
+								backgroundColor: noteHover ? "#f0f0f0" : "transparent",
 								"&:hover": {
 									backgroundColor: "#f0f0f0",
 								},
 								}}
-								onMouseEnter={() => setTodoHover(true)}
-								onMouseLeave={() => setTodoHover(false)}
+								onMouseEnter={() => setNoteHover(true)}
+								onMouseLeave={() => setNoteHover(false)}
               				>
 								<ListItemIcon>
 									<Notes />
@@ -292,7 +292,7 @@ const Home = (props) => {
 				</Drawer>
 				<Root open={open}>
 					<ToolbarSpacing />
-					<div>{state.render ? <Account /> : <Todo />}</div>
+					<div>{state.render ? <Account /> : <Note />}</div>
 				</Root>
 			</Box>
 		)

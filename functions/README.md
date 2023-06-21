@@ -1,34 +1,34 @@
 # Functions
-**API Endpoints for Todo and User**
+**API Endpoints for Notes and User**
 
-## Todo
-#### getAllTodos
+## Note
+#### getAllNotes
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todos
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/notes
 METHOD: GET
 ```
-#### getOneTodo
+#### getOneNote
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todo/<todoId>
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/note/<noteId>
 METHOD: GET
 ```
-#### postOneTodo
+#### postOneNote
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todo
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/note
 METHOD: POST
 BODY: {
   "title": "Homework",
   "body": "Do math homework"
 }
 ```
-#### deleteTodo
+#### deleteNote
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todo/<todoId>
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/note/<noteId>
 METHOD: DELETE
 ```
-#### editTodo
+#### editNote
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/todo/<todoId>
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/note/<noteId>
 METHOD: PUT
 BODY: {
   "title": "Homework 2",
@@ -39,7 +39,7 @@ BODY: {
 ## Users
 #### loginUser
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/login
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/login
 METHOD: POST
 BODY: {
   "email": "username@email.com",
@@ -48,7 +48,7 @@ BODY: {
 ```
 #### signUpUser
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/signup
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/signup
 METHOD: POST
 BODY: {
   "firstName": "first name here",
@@ -63,7 +63,7 @@ BODY: {
 ```
 #### uploadProfilePicture
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/user/image
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/user/image
 METHOD: POST
 BODY: {
   "content-type": "form-data",
@@ -72,7 +72,7 @@ BODY: {
 ```
 #### updateUserDetails
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/user
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/user
 METHOD: POST
 BODY: {
   "firstName": "name",
@@ -82,6 +82,6 @@ BODY: {
 ```
 #### getUserDetails
 ```
-URL: http://localhost:5000/todoapp-<app-id>/<region-name>/api/user
+URL: http://localhost:5000/noteapp-<app-id>/<region-name>/api/user
 METHOD: GET
 ```

@@ -86,14 +86,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-// Todo function
-const Todo = (props) => {
+// Note function
+const Note = (props) => {
   // States of function components
   const [state, setState] = useState({
-    todos: "",
+    notes: "",
     title: "",
     body: "",
-    todoId: "",
+    noteId: "",
     errors: [],
     open: false,
     uiLoading: true,
@@ -108,12 +108,12 @@ const Todo = (props) => {
     const authToken = localStorage.getItem("AuthToken");  // Retrieve the authentication token from local storage
     axios.defaults.headers.common = { Authorization: `${authToken}` };  // Set the authorization header for the axios request
     axios
-      .get(`${config.API_URL}/todos`) // Make a GET request
+      .get(`${config.API_URL}/notes`) // Make a GET request
       .then((response) => {
         // Handle successful response
         setState((prevState) => ({
           ...prevState,
-          todos: response.data,
+          notes: response.data,
           uiLoading: false,
         }));  // Set uiLoading to false once the data is loaded
       })
@@ -135,7 +135,7 @@ const Todo = (props) => {
     // Get screen width
     const screenWidth = window.innerWidth;
 
-    // Update the number of todos per row based on screen width
+    // Update the number of notes per row based on screen width
     if (screenWidth >= 1035) {
       setState((prevState) => ({
         ...prevState,
@@ -156,46 +156,46 @@ const Todo = (props) => {
       [event.target.name]: event.target.value,
     });
   };
-  // Handler to delete todo items
-  const deleteTodoHandler = (data) => {
+  // Handler to delete note items
+  const deleteNoteHandler = (data) => {
     authMiddleWare(props.history);  // Validate authentication middleware
     const authToken = localStorage.getItem("AuthToken");  // Get the authentication token from local storage
     axios.defaults.headers.common = { Authorization: `${authToken}` }; // Set the authentication token in the request header
-    let todoId = data.todo.todoId;
+    let noteId = data.note.noteId;
     axios
-      // Deleting the todo item from the database collection
-      .delete(`${config.API_URL}/todo/${todoId}`)
+      // Deleting the note item from the database collection
+      .delete(`${config.API_URL}/note/${noteId}`)
       .then(() => {
-        // Reload the page after successfully deleting the todo
+        // Reload the page after successfully deleting the note
         window.location.reload();
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  // Handle editing todo items
+  // Handle editing note items
   const handleEditClickOpen = (data) => {
     // Updating the states as user is inputting the value
     setState((prevState) => ({
       ...prevState,
-      title: data.todo.title,
-      body: data.todo.body,
-      todoId: data.todo.todoId,
+      title: data.note.title,
+      body: data.note.body,
+      noteId: data.note.noteId,
       buttonType: "Edit",
       open: true,
     }));
   };
-  // Handle when user views the todo item
+  // Handle when user views the note item
   const handleViewOpen = (data) => {
     setState((prevState) => ({
       ...prevState,
-      title: data.todo.title,
-      body: data.todo.body,
+      title: data.note.title,
+      body: data.note.body,
       viewOpen: true,
     }));
   };
 
-  // Creating a custom dialog for the todo item popup
+  // Creating a custom dialog for the note item popup
   const CustomDialogTitle = (props) => {
     const { children, onClose } = props;
     return (
@@ -226,41 +226,41 @@ const Todo = (props) => {
   // Getting the states
   const { open, errors, viewOpen } = state;
 
-  // Handle when user opens the todo item
+  // Handle when user opens the note item
   const handleClickOpen = () => {
     setState((prevState) => ({
       ...prevState,
-      todoId: "",
+      noteId: "",
       title: "",
       body: "",
       buttonType: "",
       open: true,
     }));
   };
-  // Handler for when user submits the todo edit/creation
+  // Handler for when user submits the note edit/creation
   const handleSubmit = (event) => {
     authMiddleWare(props.history);  // Validate authentication middleware
     event.preventDefault(); // Prevent default form submission behavior
 
-    // Prepare the new user todo item 
-    const userTodo = {
+    // Prepare the new user note item 
+    const userNote = {
       title: state.title,
       body: state.body,
     };
     let options = {};
 
-    // Setting the request options depending if user is editing or creating a todo item
+    // Setting the request options depending if user is editing or creating a note item
     if (state.buttonType === "Edit") {
       options = {
-        url: `${config.API_URL}/todo/${state.todoId}`,
+        url: `${config.API_URL}/note/${state.noteId}`,
         method: "put",
-        data: userTodo,
+        data: userNote,
       };
     } else {
       options = {
-        url: `${config.API_URL}/todo`,
+        url: `${config.API_URL}/note`,
         method: "post",
-        data: userTodo,
+        data: userNote,
       };
     }
     const authToken = localStorage.getItem("AuthToken");  // Getting the authentication token from local storage
@@ -311,7 +311,7 @@ const Todo = (props) => {
         <CustomToolbar />
         <FloatingButton
           color="primary"
-          aria-label="Add Todo"
+          aria-label="Add Note"
           onClick={handleClickOpen}
         >
           <AddCircle style={{ fontSize: 60 }} />
@@ -333,7 +333,7 @@ const Todo = (props) => {
                 <Close />
               </IconButton>
               <Title variant="h6">
-                {state.buttonType === "Edit" ? "Edit Todo" : "Add Task"}
+                {state.buttonType === "Edit" ? "Edit Note" : "Add Note"}
               </Title>
               <SubmitButton 
                 autoFocus 
@@ -385,25 +385,25 @@ const Todo = (props) => {
         </Dialog>
 
         <Grid container spacing={2}>
-          {state.todos.map((todo) => (
-            <Grid item xs={12} sm={state.col} key={todo.todoId}>
+          {state.notes.map((note) => (
+            <Grid item xs={12} sm={state.col} key={note.noteId}>
               <RootCard variant="outlined">
                 <CardContent>
                   <Typography variant="h5" component="h2">
-                    {todo.title}
+                    {note.title}
                   </Typography>
                   <Pos color="textSecondary">
-                    {dayjs(todo.createdAt).fromNow()}
+                    {dayjs(note.createdAt).fromNow()}
                   </Pos>
                   <Typography variant="body2" component="p">
-                    {`${todo.body.substring(0, 65)}`}
+                    {`${note.body.substring(0, 65)}`}
                   </Typography>
                 </CardContent>
                 <CardActions>
                   <Button
                     size="small"
                     color="primary"
-                    onClick={() => handleViewOpen({ todo })}
+                    onClick={() => handleViewOpen({ note })}
                   >
                     {" "}
                     View{" "}
@@ -411,14 +411,14 @@ const Todo = (props) => {
                   <Button
                     size="small"
                     color="primary"
-                    onClick={() => handleEditClickOpen({ todo })}
+                    onClick={() => handleEditClickOpen({ note })}
                   >
                     Edit
                   </Button>
                   <Button
                     size="small"
                     color="primary"
-                    onClick={() => deleteTodoHandler({ todo })}
+                    onClick={() => deleteNoteHandler({ note })}
                   >
                     Delete
                   </Button>
@@ -441,7 +441,7 @@ const Todo = (props) => {
           <CustomDialogContent dividers>
             <TextField
               fullWidth
-              id="todoDetails"
+              id="noteDetails"
               name="body"
               multiline
               readOnly
@@ -459,4 +459,4 @@ const Todo = (props) => {
   }
 }
 
-export default Todo;
+export default Note;

@@ -1,22 +1,22 @@
 const { db } = require("../util/admin");
 
-// Get all todos belonging to a specific user
-exports.getAllTodos = async (request, response) => {
+// Get all notes belonging to a specific user
+exports.getAllNotes = async (request, response) => {
   try {
-    // Retrieve all todos from the 'todos' collection 
+    // Retrieve all notes from the 'notes' collection 
     // where the username matches the user making the request
     const snapshot = await db
-      .collection("todos")
+      .collection("notes")
       .where("username", "==", request.user.username)
       .orderBy("createdAt", "desc")
       .get();
 
-    let todos = [];
+    let notes = [];
     // Iterate through each document in the snapshot collection
     snapshot.forEach((doc) => {
-      // Extract relevant data from the document and add it to the 'todos' array
-      todos.push({
-        todoId: doc.id,
+      // Extract relevant data from the document and add it to the 'notes' array
+      notes.push({
+        noteId: doc.id,
         title: doc.data().title,
         username: doc.data().username,
         body: doc.data().body,
@@ -24,8 +24,8 @@ exports.getAllTodos = async (request, response) => {
       });
     });
 
-    // Return the 'todos' array as a JSON response
-    return response.json(todos);
+    // Return the 'notes' array as a JSON response
+    return response.json(notes);
   } catch (err) {
     console.error(err);
     // Return an error response if an error occurs during the process
@@ -33,15 +33,15 @@ exports.getAllTodos = async (request, response) => {
   }
 };
 
-// Get a single todo by its ID
-exports.getOneTodo = async (request, response) => {
+// Get a single note by its ID
+exports.getOneNote = async (request, response) => {
   try {
-    // Retrieve the document from the 'todos' collection based on the provided todoID
-    const doc = await db.doc(`/todos/${request.params.todoId}`).get();
+    // Retrieve the document from the 'notes' collection based on the provided noteID
+    const doc = await db.doc(`/notes/${request.params.noteId}`).get();
 
     // Check if the document exists
     if (!doc.exists) {
-      return response.status(404).json({ error: "Todo not found" });
+      return response.status(404).json({ error: "Note not found" });
     }
     // Check if the username of the document matches 
     // the username of the user making the request
@@ -49,12 +49,12 @@ exports.getOneTodo = async (request, response) => {
       return response.status(403).json({ error: "Unauthorized" });
     }
 
-    // Extract the todo data from the document and add the todoId field
-    const todoData = doc.data();
-    todoData.todoId = doc.id;
+    // Extract the note data from the document and add the noteId field
+    const noteData = doc.data();
+    noteData.noteId = doc.id;
 
-    // Return the todo data as a JSON response
-    return response.json(todoData);
+    // Return the note data as a JSON response
+    return response.json(noteData);
   } catch (err) {
     console.error(err);
     // Return an error response if an error occurs during the process
@@ -62,8 +62,8 @@ exports.getOneTodo = async (request, response) => {
   }
 };
 
-// Creates a new todo
-exports.postOneTodo = async (request, response) => {
+// Creates a new note
+exports.postOneNote = async (request, response) => {
   try {
     // Check if the request body's 'body' field is empty
     if (request.body.body.trim() === "") {
@@ -74,23 +74,23 @@ exports.postOneTodo = async (request, response) => {
       return response.status(400).json({ title: "Must not be empty" });
     } 
 
-    // Create a new todo item object with the provided fields
-    const newTodoItem = {
+    // Create a new note item object with the provided fields
+    const newNoteItem = {
       title: request.body.title,
       username: request.user.username,
       body: request.body.body,
       createdAt: new Date().toISOString()
     };
 
-    // Add the new todo item to the 'todos' collection and retrieve the document reference
-    const doc = await db.collection("todos").add(newTodoItem);
+    // Add the new note item to the 'notes' collection and retrieve the document reference
+    const doc = await db.collection("notes").add(newNoteItem);
 
-    // Add the todoId field to the new todo item object
-    const responseTodoItem = newTodoItem;
-    responseTodoItem.todoId = doc.id
+    // Add the noteId field to the new note item object
+    const responseNoteItem = newNoteItem;
+    responseNoteItem.noteId = doc.id
 
-    // Return the new todo item as a JSON response
-    return response.json(responseTodoItem);
+    // Return the new note item as a JSON response
+    return response.json(responseNoteItem);
   } catch (err) {
     console.error(err);
     // Return an error response if an error occurs during the process
@@ -98,16 +98,16 @@ exports.postOneTodo = async (request, response) => {
   }
 };
 
-// Delete a todo by its ID
-exports.deleteTodo = async (request, response) => {
+// Delete a note by its ID
+exports.deleteNote = async (request, response) => {
   try {
-    //  Get the document reference for the provided todoId
-    const document = db.doc(`/todos/${request.params.todoId}`);
+    //  Get the document reference for the provided noteId
+    const document = db.doc(`/notes/${request.params.noteId}`);
     const doc = await document.get();
 
     // Check if the document exists
     if (!doc.exists) {
-      return response.status(404).json({ error: "Todo not found" });
+      return response.status(404).json({ error: "Note not found" });
     }
     // Check if the username of the document matches 
     // the username of the user making the request
@@ -127,16 +127,16 @@ exports.deleteTodo = async (request, response) => {
   }
 };
 
-// Edit a todo by its ID
-exports.editTodo = async (request, response) => {
+// Edit a note by its ID
+exports.editNote = async (request, response) => {
   try { 
-    // Check if the request body contains 'todoId' or 'createdAt' fields
-    if (request.body.todoId || request.body.createdAt) {
+    // Check if the request body contains 'noteId' or 'createdAt' fields
+    if (request.body.noteId || request.body.createdAt) {
       return response.status(403).json({ message: "Not allowed to edit" });
     }
 
-    // Get the document reference for the provided todoId
-    const doc = db.collection("todos").doc(`${request.params.todoId}`);
+    // Get the document reference for the provided noteId
+    const doc = db.collection("notes").doc(`${request.params.noteId}`);
     // Update the document with the field provided in the request body
     await doc.update(request.body);
 

@@ -5,14 +5,14 @@ const cors = require("cors");
 
 app.use(cors());
 
-// Todos Functions
+// Notes Functions
 const {
-  getAllTodos,
-  getOneTodo,
-  postOneTodo,
-  deleteTodo,
-  editTodo,
-} = require("./APIs/todos");
+  getAllNotes,
+  getOneNote,
+  postOneNote,
+  deleteNote,
+  editNote,
+} = require("./APIs/notes");
 
 // User Functions
 const {
@@ -24,12 +24,12 @@ const {
   resetPassword
 } = require("./APIs/users");
 
-// Todo API
-app.get("/todos", auth, getAllTodos);
-app.get("/todo/:todoId", auth, getOneTodo);
-app.post("/todo", auth, postOneTodo);
-app.delete("/todo/:todoId", auth, deleteTodo);
-app.put("/todo/:todoId", auth, editTodo);
+// Note API
+app.get("/notes", auth, getAllNotes);
+app.get("/note/:noteId", auth, getOneNote);
+app.post("/notes", auth, postOneNote);
+app.delete("/note/:noteId", auth, deleteNote);
+app.put("/note/:noteId", auth, editNote);
 
 // User API
 app.post("/login", loginUser);

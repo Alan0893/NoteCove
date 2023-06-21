@@ -39,7 +39,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://us-central1-todo-83183.cloudfunctions.net/api",
+  "proxy": "https://us-central1-notecove.cloudfunctions.net/api",
   "devDependencies": {
     "web-vitals": "^3.3.2"
   }
