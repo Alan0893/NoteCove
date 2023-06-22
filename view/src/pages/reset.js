@@ -9,6 +9,7 @@ import {
   Typography,
   Container,
   CircularProgress,
+  Box
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import styled from "@mui/system/styled";
@@ -18,7 +19,7 @@ import config from "../util/config";
 
 // Styled Components
 const Paper = styled("div")(({ theme }) => ({
-  marginTop: theme.spacing(8),
+  marginTop: theme.spacing(0),
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -69,7 +70,7 @@ const Reset = () => {
     } catch (err) {
       if (err.response) {
         // Set the error state with the error data from the response
-        setError(err.response.data);
+        setError(err.response.data.error);
       } else {  // Unexpected Error
         console.error(err);
       }
@@ -94,72 +95,95 @@ const Reset = () => {
 
   //  Render the reset password page
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Paper>
-        <StyledAvatar>
-          <LockOutlinedIcon />
-        </StyledAvatar>
-        <Typography component="h1" variant="h5">
-          Reset Password
-        </Typography>
-        {!resetSent ? (
-          <Form noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              error={error ? true : false}
-              helperText={error}
-              onChange={handleChange}
-            />
-            <SubmitButton
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={handleSubmit}
-              disabled={loading || !isEmail(email)}
-            >
-              Reset Password
-              {loading && <Progress size={30} />}
-            </SubmitButton>
-          </Form>
-        ) : (
-          <>
-            <Typography variant="body2" mt={2} mb={2} textAlign="center">
-              Password reset email sent to {email}. Please check your email to
-              proceed.
-            </Typography>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={handleBackToLogin}
-            >
-              Go Back to Login
-            </Button>
-          </>
-        )}
-        {!resetSent && (
-          <Grid container>
-            <Grid>
-              <Link href="signup" variant="body2" style={{ display: "block" }}>
-                {"Create account!"}
-              </Link>
-              <Link href="login" variant="body2" style={{ display: "block" }}>
-                {"Back to Login"}
-              </Link>
+    <Container
+      component="main" 
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh"
+      }}
+    >
+      <Box
+				sx={{
+					boxShadow: 4,
+					borderRadius: 2,
+					px: 4,
+					py: 6,
+					marginTop: 4,
+					marginBottom: 4,
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+				}}
+			>
+        <CssBaseline />
+        <Paper>
+          <StyledAvatar>
+            <LockOutlinedIcon />
+          </StyledAvatar>
+          <Typography component="h1" variant="h5">
+            Reset Password
+          </Typography>
+          {!resetSent ? (
+            <Form noValidate>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                error={error ? true : false}
+                helperText={error}
+                onChange={handleChange}
+              />
+              <SubmitButton
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+                disabled={loading || !isEmail(email)}
+              >
+                Reset Password
+                {loading && <Progress size={30} />}
+              </SubmitButton>
+            </Form>
+          ) : (
+            <>
+              <Typography variant="body2" mt={2} mb={2} textAlign="center">
+                Password reset email sent to {email}. Please check your email to
+                proceed.
+              </Typography>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleBackToLogin}
+              >
+                Go Back to Login
+              </Button>
+            </>
+          )}
+          {!resetSent && (
+            <Grid container>
+              <Grid>
+                <Link href="signup" variant="body2" style={{ display: "block" }}>
+                  {"Create account!"}
+                </Link>
+                <Link href="login" variant="body2" style={{ display: "block" }}>
+                  {"Back to Login"}
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
-        )}
-      </Paper>
+          )}
+        </Paper>
+      </Box>
     </Container>
   );
 }

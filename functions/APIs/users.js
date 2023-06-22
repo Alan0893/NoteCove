@@ -273,7 +273,7 @@ exports.resetPassword = (request, response) => {
         });
       } else {
         // Send a password reset email to the user
-        sendPasswordResetEmail(email)
+        sendPasswordResetEmail(auth, email)
           .then(() => {
             // Return a success message as a JSON response
             return response.json({

@@ -13,7 +13,8 @@ import {
 	Select,
 	MenuItem,
 	InputLabel,
-	FormControl
+	FormControl,
+	Box
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import styled from "@mui/system/styled";
@@ -22,7 +23,7 @@ import config from "../util/config";
 
 // Styled Components
 const Paper = styled("div")(({ theme }) => ({
-	marginTop: theme.spacing(8),
+	marginTop: theme.spacing(1),
 	display: "flex",
 	flexDirection: "column",
 	alignItems: "center",
@@ -118,168 +119,191 @@ const Signup = () => {
 
 	// Render the signup page
 	return (
-		<Container component="main" maxWidth="xs">
-			<CssBaseline />
-			<Paper>
-				<StyledAvatar>
-					<LockOutlinedIcon />
-				</StyledAvatar>
-				<Typography component="h1" variant="h5">
-					Sign Up
-				</Typography>
-				<Form noValidate>
-					<Grid container spacing={2}>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="firstName"
-								label="First Name"
-								name="firstName"
-								autoComplete="firstname"
-								helperText={errors.firstName}
-								error={errors.firstName ? true : false}
-								onChange={handleChange}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="lastName"
-								label="Last Name"
-								name="lastName"
-								autoComplete="lastName"
-								helperText={errors.lastName}
-								error={errors.lastName ? true : false}
-								onChange={handleChange}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="username"
-								label="Username"
-								name="username"
-								autoComplete="username"
-								helperText={errors.username}
-								error={errors.username ? true : false}
-								onChange={handleChange}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="phoneNumber"
-								label="Phone Number"
-								name="phoneNumber"
-								autoComplete="phoneNumber"
-								pattern="[7-9]{1}[0-9]{9}"
-								helperText={errors.phoneNumber}
-								error={errors.phoneNumber ? true : false}
-								onChange={handleChange}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="email"
-								label="Email Address"
-								name="email"
-								autoComplete="email"
-								helperText={errors.email}
-								error={errors.email ? true : false}
-								onChange={handleChange}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<FormControl variant="outlined" fullWidth required>
-								<InputLabel id="country-label">Country</InputLabel>
-								<Select
-									labelId="country-label"
-									id="country"
-									label="Country"
-									name="country"
-									value={country}
-									onChange={handleChange}
-								>
-									{countries.map((country) => (
-										<MenuItem key={country} value={country}>
-										{country}
-										</MenuItem>
-									))}
-								</Select>
-							</FormControl>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="password"
-								label="Password"
-								type="password"
-								name="password"
-								autoComplete="current-password"
-								helperText={errors.password}
-								error={errors.password ? true : false}
-								onChange={handleChange}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								type="password"
-								id="confirmPassword"
-								label="Confirm Password"
-								name="confirmPassword"
-								autoComplete="current-password"
-								helperText={errors.confirmPassword}
-								error={errors.confirmPassword ? true : false}
-								onChange={handleChange}
-							/>
-						</Grid>
-					</Grid>
-					<SubmitButton
-						type="submit"
-						fullWidth
-						variant="contained"
-						color="primary"
-						onClick={handleSubmit}
-						disabled={
-						loading ||
-						!email ||
-						!password ||
-						!confirmPassword ||
-						!firstName ||
-						!lastName ||
-						!country ||
-						!username ||
-						!phoneNumber
-						}
-					>
+		<Container 
+			component="main" 
+			maxWidth="sm"
+			sx={{
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+			}}
+		>
+			<Box
+				sx={{
+					boxShadow: 4,
+					borderRadius: 2,
+					px: 3,
+					py: 2,
+					marginTop: 4,
+					marginBottom: 4,
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+					width: "100%"
+				}}
+			>
+				<CssBaseline />
+				<Paper>
+					<StyledAvatar>
+						<LockOutlinedIcon />
+					</StyledAvatar>
+					<Typography component="h1" variant="h5">
 						Sign Up
-						{loading && <Progress size={30} />}
-					</SubmitButton>
-					<Grid container justify="flex-end">
-						<Grid item>
-							<Link href="login" variant="body2">
-								Already have an account? Login!
-							</Link>
+					</Typography>
+					<Form noValidate>
+						<Grid container spacing={2}>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="firstName"
+									label="First Name"
+									name="firstName"
+									autoComplete="firstname"
+									helperText={errors.firstName}
+									error={errors.firstName ? true : false}
+									onChange={handleChange}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="lastName"
+									label="Last Name"
+									name="lastName"
+									autoComplete="lastName"
+									helperText={errors.lastName}
+									error={errors.lastName ? true : false}
+									onChange={handleChange}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="username"
+									label="Username"
+									name="username"
+									autoComplete="username"
+									helperText={errors.username}
+									error={errors.username ? true : false}
+									onChange={handleChange}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="phoneNumber"
+									label="Phone Number"
+									name="phoneNumber"
+									autoComplete="phoneNumber"
+									pattern="[7-9]{1}[0-9]{9}"
+									helperText={errors.phoneNumber}
+									error={errors.phoneNumber ? true : false}
+									onChange={handleChange}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="email"
+									label="Email Address"
+									name="email"
+									autoComplete="email"
+									helperText={errors.email}
+									error={errors.email ? true : false}
+									onChange={handleChange}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<FormControl variant="outlined" fullWidth required>
+									<InputLabel id="country-label">Country</InputLabel>
+									<Select
+										labelId="country-label"
+										id="country"
+										label="Country"
+										name="country"
+										value={country}
+										onChange={handleChange}
+									>
+										{countries.map((country) => (
+											<MenuItem key={country} value={country}>
+											{country}
+											</MenuItem>
+										))}
+									</Select>
+								</FormControl>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									id="password"
+									label="Password"
+									type="password"
+									name="password"
+									autoComplete="current-password"
+									helperText={errors.password}
+									error={errors.password ? true : false}
+									onChange={handleChange}
+								/>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<TextField
+									variant="outlined"
+									required
+									fullWidth
+									type="password"
+									id="confirmPassword"
+									label="Confirm Password"
+									name="confirmPassword"
+									autoComplete="current-password"
+									helperText={errors.confirmPassword}
+									error={errors.confirmPassword ? true : false}
+									onChange={handleChange}
+								/>
+							</Grid>
 						</Grid>
-					</Grid>
-				</Form>
-			</Paper>
+						<SubmitButton
+							type="submit"
+							fullWidth
+							variant="contained"
+							color="primary"
+							onClick={handleSubmit}
+							disabled={
+							loading ||
+							!email ||
+							!password ||
+							!confirmPassword ||
+							!firstName ||
+							!lastName ||
+							!country ||
+							!username ||
+							!phoneNumber
+							}
+						>
+							Sign Up
+							{loading && <Progress size={30} />}
+						</SubmitButton>
+						<Grid container justify="flex-end">
+							<Grid item>
+								<Link href="login" variant="body2">
+									Already have an account? Login!
+								</Link>
+							</Grid>
+						</Grid>
+					</Form>
+				</Paper>
+			</Box>
 		</Container>
   	);
 }

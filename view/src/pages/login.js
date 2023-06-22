@@ -125,69 +125,69 @@ const Login = () => {
 					alignItems: "center",
 				}}
 			>
-			<CssBaseline />
-			<Paper>
-				<StyledAvatar>
-					<LockOutlinedIcon />
-				</StyledAvatar>
-				<Typography component="h1" variant="h5">
-					Login
-				</Typography>
-				<Form noValidate>
-					<TextField
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						id="email"
-						label="Email Address"
-						name="email"
-						autoComplete="email"
-						autoFocus
-						helperText={errors.email}
-						error={errors.email ? true : false}
-						onChange={handleChange}
-					/>
-					<TextField
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						name="password"
-						label="Password"
-						type="password"
-						id="password"
-						autoComplete="current-password"
-						helperText={errors.password}
-						error={errors.password ? true : false}
-						onChange={handleChange}
-					/>
-					<SubmitButton 
-						type="submit"
-						fullWidth
-						variant="contained"
-						color="primary"
-						onClick={handleSubmit}
-						disabled={loading || !isEmail(email) || !validPassword(password)}
-					>
-						Sign In
-						{loading && <Progress size={30} />}
-					</SubmitButton>
-					<Grid container>
-						<Grid>
-							<Link href="signup" variant="body2" style={{ display: 'block' }}>
-								{"Create account!"}
-							</Link>
-							<Link href="reset" variant="body2" style={{ display: 'block' }}>
-								{"Forgot password?"}
-							</Link>
+				<CssBaseline />
+				<Paper>
+					<StyledAvatar>
+						<LockOutlinedIcon />
+					</StyledAvatar>
+					<Typography component="h1" variant="h5">
+						Login
+					</Typography>
+					<Form noValidate>
+						<TextField
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							id="email"
+							label="Email Address"
+							name="email"
+							autoComplete="email"
+							autoFocus
+							helperText={errors.email}
+							error={errors.email ? true : false}
+							onChange={handleChange}
+						/>
+						<TextField
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							name="password"
+							label="Password"
+							type="password"
+							id="password"
+							autoComplete="current-password"
+							helperText={errors.password}
+							error={errors.password ? true : false}
+							onChange={handleChange}
+						/>
+						<SubmitButton 
+							type="submit"
+							fullWidth
+							variant="contained"
+							color="primary"
+							onClick={handleSubmit}
+							disabled={loading || !isEmail(email) || !validPassword(password)}
+						>
+							Sign In
+							{loading && <Progress size={30} />}
+						</SubmitButton>
+						<Grid container>
+							<Grid>
+								<Link href="signup" variant="body2" style={{ display: 'block' }}>
+									{"Create account!"}
+								</Link>
+								<Link href="reset" variant="body2" style={{ display: 'block' }}>
+									{"Forgot password?"}
+								</Link>
+							</Grid>
 						</Grid>
-					</Grid>
-					{errors.general && (
-						<CustomError variant="body2">{errors.general}</CustomError>
-					)}
-				</Form>
-			</Paper>
+						{errors.general && (
+							<CustomError variant="body2">{errors.general}</CustomError>
+						)}
+					</Form>
+				</Paper>
 			</Box>
 		</Container>
 	)
