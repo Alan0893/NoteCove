@@ -258,7 +258,7 @@ const Note = (props) => {
       };
     } else {
       options = {
-        url: `${config.API_URL}/note`,
+        url: `${config.API_URL}/notes`,
         method: "post",
         data: userNote,
       };

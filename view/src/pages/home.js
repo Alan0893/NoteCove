@@ -202,6 +202,10 @@ const Home = (props) => {
 							variant="h6"  
 							component="div"
               				noWrap
+							sx={{
+								textAlign: "center",
+								flexGrow: 1
+							}}
 						>
 							NoteCove
 						</Typography>
