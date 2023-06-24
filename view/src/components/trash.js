@@ -20,7 +20,6 @@ import {
   DialogActions,
 } from "@mui/material";
 import { 
-  AddCircle, 
   Close,  
   Star,
   StarBorder
@@ -49,11 +48,6 @@ const SubmitButton = styled(Button)({
   position: "fixed",
   top: 14,
   right: 30,
-});
-const FloatingButton = styled(IconButton)({
-  position: "fixed",
-  bottom: 0,
-  right: 0,
 });
 const Form = styled("form")(({ theme }) => ({
   width: "95%",
@@ -88,8 +82,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-// Note function
-const Note = (props) => {
+// Trash function
+const Trash = (props) => {
   // States of function components
   const [state, setState] = useState({
     notes: "",
@@ -112,15 +106,15 @@ const Note = (props) => {
     axios
       .get(`${config.API_URL}/notes`) // Make a GET request
       .then((response) => {
-        // Filter notes to include only those with the "default" folder
-        const defaultNotes = response.data.filter((note) =>
-          note.folders.includes("default")
+        // Filter notes to include only those with the "starred" folder
+        const starredNotes = response.data.filter((note) =>
+          note.folders.includes("trash")
         );
 
         // Handle successful response
         setState((prevState) => ({
           ...prevState,
-          notes: defaultNotes,
+          notes: starredNotes,
           uiLoading: false,
         }));  // Set uiLoading to false once the data is loaded
       })
@@ -169,36 +163,32 @@ const Note = (props) => {
     const authToken = localStorage.getItem("AuthToken");  // Get the authentication token from local storage
     axios.defaults.headers.common = { Authorization: `${authToken}` }; // Set the authentication token in the request header
     let noteId = data.note.noteId;
-    // Setting the state of the folders
-    let folderItems = [];
-    console.log(data.note.folders.includes("starred"))
-    if (data.note.folders.includes("starred")) {
-      folderItems = ["starred", "trash"];
-    } else {
-      folderItems = ["trash"];
-    }
-
-    // Call the 'editNote' API endpoint with the 'folders' field set to 'trash'
     axios
-      .put(`${config.API_URL}/note/${noteId}`, { folders: folderItems })
+      // Deleting the note item from the database collection
+      .delete(`${config.API_URL}/note/${noteId}`)
       .then(() => {
-        // Update the state to remove the deleted note
-        setState((prevState) => {
-          const updatedNotes = prevState.notes.filter(
-            (note) => note.noteId !== noteId
+        // Fetch updated notes from the server
+        axios.get(`${config.API_URL}/notes`)
+        .then((response) => {
+          const trashNotes = response.data.filter((note) =>
+            note.folders.includes("trash")
           );
 
-          return {
+          setState((prevState) => ({
             ...prevState,
-            notes: updatedNotes,
-          };
+            notes: trashNotes
+          }));
+        })
+        .catch((error) => {
+          console.log(error);
         });
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  const handleStarClick = (data) => {
+  // Handler to restore the note
+  const handleRestore = (data) => {
     authMiddleWare(props.history);  // Validate authentication middleware
     const authToken = localStorage.getItem("AuthToken");  // Get the authentication token from local storage
     axios.defaults.headers.common = { Authorization: `${authToken}` }; // Set the authentication token in the request header
@@ -207,19 +197,13 @@ const Note = (props) => {
     if (data.note.folders.includes("starred")) { // Already starred
       // Call the 'editNote' API endpoint to remove starred from the folders array
       axios
-        .put(`${config.API_URL}/note/${noteId}`, { folders: ["default"] })
+        .put(`${config.API_URL}/note/${noteId}`, { folders: ["default", "starred"] })
         .then(() => {
           // Update the state to reflect the changes
           setState((prevState) => {
-            const updatedNotes = prevState.notes.map((note) => {
-              if (note.noteId === noteId) {
-                return {
-                  ...note,
-                  folders: ["default"],
-                };
-              }
-              return note;
-            });
+            const updatedNotes = prevState.notes.filter(
+              (note) => note.noteId !== noteId
+            );
 
             return {
               ...prevState,
@@ -233,19 +217,13 @@ const Note = (props) => {
     } else {  // Not starred
       // Call the 'editNote' API endpoint with the 'folders' field set to 'starred'
       axios
-        .put(`${config.API_URL}/note/${noteId}`, { folders: ["default", "starred"] })
+        .put(`${config.API_URL}/note/${noteId}`, { folders: ["default"] })
         .then(() => {
           // Update the state to reflect the changes
           setState((prevState) => {
-            const updatedNotes = prevState.notes.map((note) => {
-              if (note.noteId === noteId) {
-                return {
-                  ...note,
-                  folders: ["default", "starred"],
-                };
-              }
-              return note;
-            });
+            const updatedNotes = prevState.notes.filter(
+              (note) => note.noteId !== noteId
+            );
 
             return {
               ...prevState,
@@ -258,18 +236,7 @@ const Note = (props) => {
         });
     }
   }
-  // Handle editing note items
-  const handleEditClickOpen = (data) => {
-    // Updating the states as user is inputting the value
-    setState((prevState) => ({
-      ...prevState,
-      title: data.note.title,
-      body: data.note.body,
-      noteId: data.note.noteId,
-      buttonType: "Edit",
-      open: true,
-    }));
-  };
+
   // Handle when user views the note item
   const handleViewOpen = (data) => {
     setState((prevState) => ({
@@ -303,17 +270,6 @@ const Note = (props) => {
   // Getting the states
   const { open, errors, viewOpen } = state;
 
-  // Handle when user opens the note item
-  const handleClickOpen = () => {
-    setState((prevState) => ({
-      ...prevState,
-      noteId: "",
-      title: "",
-      body: "",
-      buttonType: "",
-      open: true,
-    }));
-  };
   // Handler for when user submits the note edit/creation
   const handleSubmit = (event) => {
     authMiddleWare(props.history);  // Validate authentication middleware
@@ -324,22 +280,12 @@ const Note = (props) => {
       title: state.title,
       body: state.body,
     };
-    let options = {};
+    let options = {
+      url: `${config.API_URL}/note/${state.noteId}`,
+      method: "put",
+      data: userNote,
+    };
 
-    // Setting the request options depending if user is editing or creating a note item
-    if (state.buttonType === "Edit") {
-      options = {
-        url: `${config.API_URL}/note/${state.noteId}`,
-        method: "put",
-        data: userNote,
-      };
-    } else {
-      options = {
-        url: `${config.API_URL}/notes`,
-        method: "post",
-        data: userNote,
-      };
-    }
     const authToken = localStorage.getItem("AuthToken");  // Getting the authentication token from local storage
     axios.defaults.headers.common = { Authorization: `${authToken}` };  // Set the authorization header for axios request
     axios(options)
@@ -352,14 +298,14 @@ const Note = (props) => {
         axios.get(`${config.API_URL}/notes`)
           .then((response) => {
 
-            const defaultNotes = response.data.filter((note) =>
-              note.folders.includes("default")
+            const starredNotes = response.data.filter((note) =>
+              note.folders.includes("starred")
             );
 
             // Handle successful response
             setState((prevState) => ({
               ...prevState,
-              notes: defaultNotes,
+              notes: starredNotes,
             }));
           })
           .catch((error) => {
@@ -427,15 +373,8 @@ const Note = (props) => {
             marginTop: '-50px'
           }}
         >
-          All Notes
+          Trash
         </Typography>
-        <FloatingButton
-          color="primary"
-          aria-label="Add Note"
-          onClick={handleClickOpen}
-        >
-          <AddCircle style={{ fontSize: 50 }} />
-        </FloatingButton>
         <Dialog
           fullScreen
           open={open}
@@ -453,14 +392,14 @@ const Note = (props) => {
                 <Close />
               </IconButton>
               <Title variant="h6">
-                {state.buttonType === "Edit" ? "Edit Note" : "Add Note"}
+                {"Edit Note"}
               </Title>
               <SubmitButton 
                 autoFocus 
                 color="inherit" 
                 onClick={handleSubmit}
               >
-                {state.buttonType === "Edit" ? "Save" : "Submit"}
+                {"Save"}
               </SubmitButton>
             </Toolbar>
           </Appbar>
@@ -522,7 +461,6 @@ const Note = (props) => {
                 <CardActions>
                   <IconButton
                     color="primary"
-                    onClick={() => handleStarClick({ note })}
                   >
                     {note.folders.includes("starred")
                       ? <Star style={{ color: '#fbbc05' }} /> 
@@ -539,9 +477,9 @@ const Note = (props) => {
                   <Button
                     size="small"
                     color="success"
-                    onClick={() => handleEditClickOpen({ note })}
+                    onClick={() => handleRestore({ note })}
                   >
-                    Edit
+                    Restore
                   </Button>
                   <Button
                     size="small"
@@ -584,4 +522,4 @@ const Note = (props) => {
   }
 }
 
-export default Note;
+export default Trash;

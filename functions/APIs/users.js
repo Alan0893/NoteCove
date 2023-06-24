@@ -57,6 +57,15 @@ exports.loginUser = (request, response) => {
     })
 };
 
+// Create default folder
+const createDefaultFolder = (user, folderName) => {
+  const folder = {
+    folderName: folderName,
+    username: user,
+  }
+  return db.collection("folders").add(folder);
+}
+
 //  User Sign Up
 exports.signUpUser = (request, response) => {
   const newUser = {
@@ -74,7 +83,7 @@ exports.signUpUser = (request, response) => {
   const { valid, errors } = validateSignUpData(newUser);
   if (!valid) return response.status(400).json(errors);
 
-  let token, userId;
+  let token, userId, userCredentials;
   // Check if the username is already taken
   db.doc(`/users/${newUser.username}`)
     .get()
@@ -100,7 +109,7 @@ exports.signUpUser = (request, response) => {
     .then((idToken) => {
       token = idToken;
       // Create user credentials data to be stored in the 'users' collection
-      const userCredentials = {
+      userCredentials = {
         firstName: newUser.firstName,
         lastName: newUser.lastName,
         username: newUser.username,
@@ -112,6 +121,14 @@ exports.signUpUser = (request, response) => {
       };
       // Set the user credentials in the 'users' collection
       return db.doc(`/users/${newUser.username}`).set(userCredentials);
+    })
+    .then(() => {
+      // Create a default folder for the user
+      return createDefaultFolder(userCredentials.username, "Default");
+    })
+    .then(() => {
+      // Create a trash folder for the user
+      return createDefaultFolder(userCredentials.username, "Trash");
     })
     .then(() => {
       // Return the authentication token as a JSON response

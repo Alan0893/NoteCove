@@ -20,7 +20,8 @@ exports.getAllNotes = async (request, response) => {
         title: doc.data().title,
         username: doc.data().username,
         body: doc.data().body,
-        createdAt:  doc.data().createdAt
+        createdAt:  doc.data().createdAt,
+        folders: doc.data().folders
       });
     });
 
@@ -79,7 +80,8 @@ exports.postOneNote = async (request, response) => {
       title: request.body.title,
       username: request.user.username,
       body: request.body.body,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      folders: ["default"]
     };
 
     // Add the new note item to the 'notes' collection and retrieve the document reference
@@ -87,7 +89,7 @@ exports.postOneNote = async (request, response) => {
 
     // Add the noteId field to the new note item object
     const responseNoteItem = newNoteItem;
-    responseNoteItem.noteId = doc.id
+    responseNoteItem.noteId = doc.id;
 
     // Return the new note item as a JSON response
     return response.json(responseNoteItem);
@@ -137,6 +139,18 @@ exports.editNote = async (request, response) => {
 
     // Get the document reference for the provided noteId
     const doc = db.collection("notes").doc(`${request.params.noteId}`);
+    const note = await doc.get();
+
+    // Check if the document exists
+    if (!note.exists) {
+      return response.status(404).json({ message: "Not found" });
+    }
+
+    // Check if the username of the document matches the username of the user making the request
+    if (note.data().username !==  request.user.username) {
+      return response.status(403).json({ error: "Unauthorized" });
+    }
+
     // Update the document with the field provided in the request body
     await doc.update(request.body);
 

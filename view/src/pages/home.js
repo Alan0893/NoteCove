@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Box,
+	Box,
 	Drawer,
 	AppBar as MuiAppBar,
 	CssBaseline,
 	Toolbar,
 	List,
-	ListItem,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
@@ -15,20 +14,23 @@ import {
 	Divider,
 	Avatar,
 	CircularProgress,
-	IconButton
+	IconButton,
 } from "@mui/material";
 import { 
-	AccountBox, 
-	Notes, 
+	AccountCircle,
+	Star,
+	Delete,
+	LibraryBooks, 
 	ExitToApp,
 	Menu,
 	ChevronLeft,
-	ChevronRight
 } from "@mui/icons-material";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Account from "../components/account";
 import Note from "../components/note";
+import Starred from "../components/starred";
+import Trash from "../components/trash";
 import { authMiddleWare } from "../util/auth";
 import config from "../util/config";
 
@@ -39,7 +41,7 @@ const Root = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
 	theme, open
 }) => ({
 	flexGrow: 1,
-	padding: theme.spacing(3),
+	padding: theme.spacing(2.5),
 	transition: theme.transitions.create('margin', {
 		easing: theme.transitions.easing.sharp,
 		duration: theme.transitions.duration.leavingScreen
@@ -76,13 +78,14 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 	...theme.mixins.toolbar,
 	justifyContent: 'flex-end'
 }));
-const CustomAvatar = styled(Avatar)({
+const CustomAvatar = styled(Avatar)(( { theme }) => ({
 	height: 110,
 	width: 110,
 	flexShrink: 0,
 	flexGrow: 0,
-	marginTop: 20
-});
+	marginTop: 0,
+	border: `2px solid ${theme.palette.primary.main}`
+}));
 const ToolbarSpacing = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
@@ -96,22 +99,20 @@ const UiProgress = styled(CircularProgress)(({
 }));
 
 const Home = (props) => {
-  // Response Drawer function components
-	const theme = useTheme();
+  	// Response Drawer function components
 	const [open, setOpen] = useState(false);
-  // Function to handle opening the drawer
-	const handleDrawerOpen = () => {
-		setOpen(true);
-	};
-  // Function to handle closing the drawer
-	const handleDrawerClose = () => {
-		setOpen(false);
-	};
 
-  // Hovering over <ListItemButton> Components function components
-  const [accountHover, setAccountHover] = useState(false);
-  const [noteHover, setNoteHover] = useState(false);
-  const [logoutHover, setLogoutHover] = useState(false);
+  	// Function to handle opening/closing the drawer
+	const toggleDrawer = (open) => (event) => {
+	if (
+		event &&
+		event.type === 'keydown' &&
+		(event.key === 'Tab' || event.key === 'Shift')
+	) {
+		return;
+	}
+		setOpen(open);
+	};
 
 	// States of function components
   	const [state, setState] = useState({
@@ -120,7 +121,7 @@ const Home = (props) => {
 		profilePicture: "",
 		uiLoading: true,
 		imageLoading: false,
-		render: false,
+		render: "notes",
 	});
 
 	// Provide navigation to redirect to pages
@@ -134,7 +135,7 @@ const Home = (props) => {
 		axios.defaults.headers.common = { Authorization: `${authToken}` };  // Set the authorization header for axios request
 		axios
 			.get(`${config.API_URL}/user`)  // Make a GET request
-			.then((response) => { 
+			.then((response) => {
 				// Handle successful response
 				setState((prevState) => ({
 					...prevState,
@@ -161,13 +162,18 @@ const Home = (props) => {
 			});
 	}, [props.history, navigate]);
 
-	// Setting the render state to true
+	// Setting the render states
 	const loadAccountPage = () => {
-		setState((prevState) => ({ ...prevState, render: true }));
+		setState((prevState) => ({ ...prevState, render: "account" }));
 	};
-	// Setting the render state to false
 	const loadNotePage = () => {
-		setState((prevState) => ({ ...prevState, render: false }));
+		setState((prevState) => ({ ...prevState, render: "notes" }));
+	};
+	const loadStarredPage = () => {
+		setState((prevState) => ({ ...prevState, render: "starred" }));
+	};
+	const loadTrashPage = () => {
+		setState((prevState) => ({ ...prevState, render: "trash" }));
 	};
 	// Handling when the user logs out
 	const logoutHandler = () => {
@@ -192,7 +198,7 @@ const Home = (props) => {
 						<IconButton
 							color="inherit"
 							aria-label="open drawer"
-							onClick={handleDrawerOpen}
+							onClick={toggleDrawer(true)}
 							edge="start"
 							sx={{ mr: 2, ...(open && { display: "none" }) }}
 						>
@@ -209,94 +215,91 @@ const Home = (props) => {
 						>
 							NoteCove
 						</Typography>
+						<IconButton
+							color="inherit"
+							aria-label="account"
+							onClick={loadAccountPage}
+							sx={{ ml: "auto" }}
+						>
+							<AccountCircle />
+						</IconButton>
+						<IconButton
+							color="inherit"
+							aria-label="logout"
+							onClick={logoutHandler}
+							sx={{ ml: "auto" }}
+						>
+							<ExitToApp />
+						</IconButton>
 					</Toolbar>
 				</AppBar>
 				<Drawer
-					sx={{
-						width: drawerWidth,
-						flexShrink: 0,
-						'& .MuiDrawer-paper': {
-							width: drawerWidth,
-							boxSizing: 'border-box'
-						}
-					}}
-					variant="persistent"
 					anchor="left"
 					open={open}
+					onClose={toggleDrawer(false)}
+					onOpen={toggleDrawer(true)}
+					sx={{
+						width: drawerWidth,
+					}}
+					variant="persistent"
 				>
-					<DrawerHeader>
-						<IconButton onClick={handleDrawerClose}>
-							{theme.direction === 'ltr' ? <ChevronLeft /> : <ChevronRight />}
-						</IconButton>
-					</DrawerHeader>
-					<Divider />
-					<center>
-						<CustomAvatar src={state.profilePicture} />
-						<p>
-							{" "}
-							{state.firstName} {state.lastName}
-						</p>
-					</center>
-					<Divider />
-					<List>
-						<ListItem disablePadding>
-							<ListItemButton onClick={loadNotePage}
-								sx={{
-								backgroundColor: noteHover ? "#f0f0f0" : "transparent",
-								"&:hover": {
-									backgroundColor: "#f0f0f0",
-								},
-								}}
-								onMouseEnter={() => setNoteHover(true)}
-								onMouseLeave={() => setNoteHover(false)}
-              				>
-								<ListItemIcon>
-									<Notes />
-								</ListItemIcon>
-								<ListItemText primary="Tasks" />
-							</ListItemButton>
-						</ListItem>
+					<Box
+						sx={{
+							width: drawerWidth
+						}}
+						role="presentation"
+						onClick={toggleDrawer(false)}
+						onKeyDown={toggleDrawer(false)}
+					>
+						<DrawerHeader>
+							<IconButton onClick={toggleDrawer(false)}>
+								<ChevronLeft/>
+							</IconButton>
+						</DrawerHeader>
+						<center>
+							<CustomAvatar 
+								src={state.profilePicture} 
 
-						<ListItem disablePadding>
-							<ListItemButton onClick={loadAccountPage}
-								sx={{
-								backgroundColor: accountHover ? "#f0f0f0" : "transparent",
-								"&:hover": {
-									backgroundColor: "#f0f0f0",
-								},
-								}}
-								onMouseEnter={() => setAccountHover(true)}
-								onMouseLeave={() => setAccountHover(false)}
-							>
+							/>
+							<p>
+								{" "}
+								{state.firstName} {state.lastName}
+							</p>
+						</center>
+						<Divider />
+						<List>
+							<ListItemButton onClick={loadNotePage}>
 								<ListItemIcon>
-									<AccountBox />
+									<LibraryBooks />
 								</ListItemIcon>
-								<ListItemText primary="Account" />
+								<ListItemText primary="All Notes" />
 							</ListItemButton>
-						</ListItem>
 
-						<ListItem disablePadding>
-							<ListItemButton onClick={logoutHandler}
-								sx={{
-								backgroundColor: logoutHover ? "#f0f0f0" : "transparent",
-								"&:hover": {
-									backgroundColor: "#f0f0f0",
-								},
-								}}
-								onMouseEnter={() => setLogoutHover(true)}
-								onMouseLeave={() => setLogoutHover(false)}
-							>
+							<ListItemButton onClick={loadStarredPage}>
 								<ListItemIcon>
-									<ExitToApp />
+									<Star />
 								</ListItemIcon>
-								<ListItemText primary="Logout" />
+								<ListItemText primary="Starred" />
 							</ListItemButton>
-						</ListItem>
-					</List>
+							
+							<ListItemButton onClick={loadTrashPage}>
+								<ListItemIcon>
+									<Delete />
+								</ListItemIcon>
+								<ListItemText primary="Trash" />
+							</ListItemButton>
+						</List>
+					</Box>
 				</Drawer>
 				<Root open={open}>
 					<ToolbarSpacing />
-					<div>{state.render ? <Account /> : <Note />}</div>
+					<div>{
+						state.render === "account" ? <Account /> :
+						state.render === "notes" ? <Note /> :
+						state.render === "starred" ? <Starred /> :
+						state.render === "trash" ? <Trash /> :
+						null
+					}</div>
 				</Root>
 			</Box>
 		)
