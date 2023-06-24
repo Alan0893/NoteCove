@@ -268,21 +268,21 @@ const Home = (props) => {
 						</center>
 						<Divider />
 						<List>
-							<ListItemButton onClick={loadNotePage}>
+							<ListItemButton onClick={loadNotePage} selected={state.render === "notes"}>
 								<ListItemIcon>
 									<LibraryBooks />
 								</ListItemIcon>
 								<ListItemText primary="All Notes" />
 							</ListItemButton>
 
-							<ListItemButton onClick={loadStarredPage}>
+							<ListItemButton onClick={loadStarredPage} selected={state.render === "starred"}>
 								<ListItemIcon>
 									<Star />
 								</ListItemIcon>
 								<ListItemText primary="Starred" />
 							</ListItemButton>
 							
-							<ListItemButton onClick={loadTrashPage}>
+							<ListItemButton onClick={loadTrashPage} selected={state.render === "trash"}>
 								<ListItemIcon>
 									<Delete />
 								</ListItemIcon>
