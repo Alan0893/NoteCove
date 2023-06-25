@@ -68,14 +68,15 @@ const RootCard = styled(Card)({
 const Created = styled(Typography)({
   marginBottom: 12,
 });
-const UiProgress = styled(CircularProgress)({
+const UiProgress = styled(CircularProgress)(({
   position: "fixed",
   zIndex: "1000",
   height: "31px",
   width: "31px",
   left: "50%",
-  top: "35%",
-});
+  top: "50%",
+  transform: "translate(-50%, -50%)"
+}));
 
 // Creating a transition for props to slide up
 const Transition = React.forwardRef(function Transition(props, ref) {

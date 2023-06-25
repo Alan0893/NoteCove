@@ -34,14 +34,15 @@ const Details = styled("div")({
 const LocationText = styled(Typography)({
   paddingLeft: "15px"
 });
-const UiProgress = styled(CircularProgress)({
+const UiProgress = styled(CircularProgress)(({
   position: "fixed",
   zIndex: "1000",
-  height: "31px",
-  width: "31px",
+  height: "25px",
+  width: "25px",
   left: "50%",
-  top: "35%",
-});
+  top: "50%",
+  transform: "translate(-50%, -50%)",
+}));
 const Progress = styled(CircularProgress)({
   position: "absolute",
 });

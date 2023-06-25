@@ -96,8 +96,9 @@ const UiProgress = styled(CircularProgress)(({
   zIndex: "1000",
   height: "31px",
   width: "31px",
-  left: "45%",
-  top: "35%",
+  left: "50%",
+  top: "50%",
+  transform: "translate(-50%, -50%)"
 }));
 
 const Home = (props) => {
