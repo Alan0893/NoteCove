@@ -24,6 +24,8 @@ import {
 	ExitToApp,
 	Menu,
 	ChevronLeft,
+	Brightness4,
+	Brightness7
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
@@ -99,6 +101,15 @@ const UiProgress = styled(CircularProgress)(({
 }));
 
 const Home = (props) => {
+	// Theming
+	const { toggleTheme } = props;
+	const [darkMode, setDarkMode] = useState(false);
+
+	const handleThemeToggle = () => {
+		setDarkMode((prevMode) => !prevMode);
+		toggleTheme();
+	};
+
   	// Response Drawer function components
 	const [open, setOpen] = useState(false);
 
@@ -193,7 +204,7 @@ const Home = (props) => {
 		return (
 			<Box sx={{ display: "flex" }}>
 				<CssBaseline />
-				<AppBar position="fixed" open={open}>
+				<AppBar position="fixed" open={open} color="primary" enableColorOnDark>
 					<Toolbar>
 						<IconButton
 							color="inherit"
@@ -203,6 +214,9 @@ const Home = (props) => {
 							sx={{ mr: 2, ...(open && { display: "none" }) }}
 						>
 							<Menu />
+						</IconButton>
+						<IconButton color="inherit" onClick={handleThemeToggle}>
+							{darkMode ? <Brightness7 /> : <Brightness4 />}
 						</IconButton>
 						<Typography 
 							variant="h6"  
