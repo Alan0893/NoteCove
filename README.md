@@ -1,5 +1,5 @@
 # NoteCove
-Implemented an API leveraging Firebase functions to seamlessly access user information and note items. Employed Firebase database to efficiently store and manage user collections and note collections. Incorporated Firebase authentication system to enable secure user sign-in and account creation. Utilized Firebase storage for seamless storage of user profile pictures. Developed a ReactJS application to provide an intuitive and visually appealing user interface for managing and displaying note lists after user login.
+Developed an API using Firebase functions that facilitated seamless access to user information and note items. Utilized Firestore as a database for efficient storage and management of user collections and note collections. Integrated Firebase authentication system to ensure secure user sign-in and account creation. Employed Firebase storage for smooth storage and retrieval of user profile pictures.
 
 ### Firebase Features Used:
 - Functions
